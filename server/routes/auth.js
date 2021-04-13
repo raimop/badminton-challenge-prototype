@@ -10,6 +10,14 @@ const validationMiddleware = (req, res, next) => {
   next();
 };
 
+router.post('/login', 
+  [
+    check("email").isEmail().normalizeEmail().withMessage("Peab olema korrektne e-mail"),
+    check("password").isLength({ min: 6 }).withMessage("Peab olema vähemalt 6 tähemärki")  
+  ],
+  validationMiddleware,
+  authController.login);
+
 router.post('/signup',
   [
     check("firstName").isLength({ min: 2 }).withMessage("Peab olema vähemalt 2 tähemärki").exists(),

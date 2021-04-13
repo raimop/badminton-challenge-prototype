@@ -4,6 +4,41 @@ const User = require('../models/User');
 const { status } = require('../helpers/status');
 const { MESSAGES } = require('../helpers/messages');
 
+exports.login = async (req, res) => {
+  const {
+    email,
+    password
+  } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
+
+    const userTemplate = {
+      _id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      gender: user.gender,
+      preferences: {
+        showHistory: user.preferences.showHistory
+      }
+    }
+
+    const token = jwt.sign(userTemplate, process.env.JWT_SECRET);
+    if (!token) throw Error(MESSAGES.USER.ERROR_SIGN_JWT);
+
+    res.status(status.success).json({
+      token,
+      user: userTemplate
+    });
+  } catch (e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+}
+
 exports.signup = async (req, res) => {
   const {
     firstName,

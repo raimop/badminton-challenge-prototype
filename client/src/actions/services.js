@@ -32,3 +32,18 @@ export const signup = data => {
 		})
 		.then(handleResponse);
 };
+
+export const login = ({
+	email,
+	password
+}) => {
+	return fetch(`${base}/auth/login`, {
+			method: "POST",
+			headers: getHeader(),
+			body: JSON.stringify({
+				email,
+				password
+			})
+		})
+		.then(handleResponse);
+};

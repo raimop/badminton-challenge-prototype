@@ -39,4 +39,18 @@ export const userSlice = createSlice({
 
 export const { getUserPending, getUserSuccess, updateUserSuccess, getUserFail, resetUserSuccess } = userSlice.actions;
 
+export const loginAndSave = (payload) => dispatch => {
+  dispatch(getUserSuccess(payload))
+
+  localStorage.setItem("user", JSON.stringify(payload.user));
+  localStorage.setItem("token", payload.token);
+};
+
+export const logoutAndErase = () => dispatch => {
+  dispatch(resetUserSuccess())
+
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+};
+
 export default userSlice.reducer;
