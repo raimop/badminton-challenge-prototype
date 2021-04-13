@@ -5,6 +5,8 @@ const cors = require("cors");
 const PORT = process.env.PORT || 8080;
 require('dotenv').config();
 
+const authRoutes = require('./routes/auth');
+
 const app = express();
 
 app.use(cors());
@@ -14,6 +16,8 @@ const db = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@
 mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true, useFindAndModify: false })
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
+
+app.use('/api/auth', authRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../', 'client', 'build');

@@ -1,0 +1,1 @@
+exports.filter = ["-email", "-password", "-createdAt", "-__v"]
