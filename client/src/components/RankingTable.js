@@ -6,7 +6,7 @@ import { PlusCircleTwoTone, StopTwoTone } from "@ant-design/icons"
 
 const RankingTable = ({ data, loading }) => {
   const user = useSelector(state => state.auth.user);
-  const onList = data.some(e => e.user._id === user._id)
+  const onList = user && data.some(e => e.user._id === user._id)
   const history = useHistory();
 
   const redirectToChallenge = id => history.push(`/challenges/create/${id}`)
