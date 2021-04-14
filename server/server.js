@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8080;
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
+const rankingRoutes = require('./routes/ranking');
 
 const app = express();
 
@@ -18,6 +19,7 @@ mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTo
   .catch(err => console.log(err));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/ranking', rankingRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../', 'client', 'build');

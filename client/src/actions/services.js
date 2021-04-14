@@ -47,3 +47,13 @@ export const login = ({
 		})
 		.then(handleResponse);
 };
+
+export const fetchRankings = param => {
+	let url = `${base}/ranking/`
+	if (param) url += param;
+	return fetch(url, {
+			method: "GET",
+			headers: getHeader(),
+		})
+		.then(handleResponse);
+};

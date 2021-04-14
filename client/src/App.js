@@ -6,6 +6,7 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import 'antd/dist/antd.css';
 import './App.css';
+import Ranking from "./pages/Ranking";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/" component={Home}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/signup" component={SignUp}/>
+        <Route exact path="/ranking" component={Ranking}/>
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>
