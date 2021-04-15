@@ -48,6 +48,8 @@ export const login = ({
 		.then(handleResponse);
 };
 
+/* Ranking */
+
 export const fetchRankings = param => {
 	let url = `${base}/ranking/`
 	if (param) url += param;
@@ -62,6 +64,20 @@ export const entryRankings = input => {
 	const decision = input === "Lahku" ? "leave" : "join"
 	return fetch(`${base}/ranking/${decision}`, {
 			method: "POST",
+			headers: getHeader({
+				token: true
+			}),
+		})
+		.then(handleResponse);
+};
+
+/* Challenges */
+
+export const fetchChallenges = param => {
+	let url = `${base}/challenge/`
+	if (param) url += param;
+	return fetch(url, {
+			method: "GET",
 			headers: getHeader({
 				token: true
 			}),

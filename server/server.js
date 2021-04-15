@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const rankingRoutes = require('./routes/ranking');
+const challengeRoutes = require('./routes/challenge');
 
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTo
 
 app.use('/api/auth', authRoutes);
 app.use('/api/ranking', rankingRoutes);
+app.use('/api/challenge', challengeRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   const buildPath = path.join(__dirname, '../', 'client', 'build');

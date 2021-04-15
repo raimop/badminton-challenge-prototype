@@ -37,7 +37,7 @@ const Header = () => {
             <li><Link to="/ranking">Edetabel</Link></li>
             { user && (
                 <>
-                  <li><Link to="/">Väljakutsed</Link></li>
+                  <li><Link to="/challenges">Väljakutsed</Link></li>
                   <li><Link to="/">Teated</Link></li>
                 </>
               )
