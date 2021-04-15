@@ -57,3 +57,14 @@ export const fetchRankings = param => {
 		})
 		.then(handleResponse);
 };
+
+export const entryRankings = input => {
+	const decision = input === "Lahku" ? "leave" : "join"
+	return fetch(`${base}/ranking/${decision}`, {
+			method: "POST",
+			headers: getHeader({
+				token: true
+			}),
+		})
+		.then(handleResponse);
+};

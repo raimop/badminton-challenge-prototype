@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { getRankingPending, getRankingSuccess, getRankingFail } from '../redux/rankingSlice';
-import { Tabs, message } from 'antd';
+import { Tabs, Popconfirm, message } from 'antd';
+import { QuestionOutlined, CheckCircleFilled } from '@ant-design/icons';
 import RankingTable from "../components/RankingTable"
 import * as services from "../actions/services.js";
 
@@ -29,6 +30,34 @@ const Ranking = () => {
       })
   }
 
+  const handleJoinLeave = decision => {
+    services.entryRankings(decision)
+      .then(res => {
+        fetchTableData();
+        message.success(`Oled ${decision.toLowerCase().concat("nud")} edetabeli${decision === "Liitu" ? "ga" : "st"}`)
+      })
+      .catch(e => message.error(e))
+  }
+
+  const displayJoinLeaveButton = input => {
+    const decision = input === "join" ? "Liitu" : "Lahku"
+    const ending = `${decision === "Liitu" ? "ga" : "st"}`
+    return (
+      <div style={{ display: "flex" }}>
+        <Popconfirm
+          icon={<QuestionOutlined style={{ color: 'red' }} />}
+          title={`Oled kindel, et tahad ${decision.toLowerCase().concat("da")} edetabeli${ending}?`}
+          onConfirm={() => handleJoinLeave(decision)}
+          onCancel={() => message.success('Tegevus peatatud')}
+          okText="Jah"
+          cancelText="Ei"
+        >
+          <button className="custom-button"><CheckCircleFilled/> { `${decision} edetabeli${ending} `}</button>
+        </Popconfirm>
+      </div>
+    )
+  }
+
   return (
     <>
       <h1 className="text-center">Edetabel</h1>
@@ -37,7 +66,7 @@ const Ranking = () => {
           {
             types.map((e, i) => (
               <TabPane tab={e.type} key={i}> 
-                <RankingTable loading={isLoading} data={data[e.short]} />
+                <RankingTable loading={isLoading} type={e.short} data={data[e.short]} displayJoinLeaveButton={displayJoinLeaveButton}/>
               </TabPane>
               ))
           }

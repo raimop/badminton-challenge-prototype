@@ -4,10 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { PlusCircleTwoTone, StopTwoTone } from "@ant-design/icons"
 
-const RankingTable = ({ data, loading }) => {
+const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
   const user = useSelector(state => state.auth.user);
   const onList = user && data.some(e => e.user._id === user._id)
   const history = useHistory();
+  const typeToGender = { ms: "m", ws: "f" }
 
   const redirectToChallenge = id => history.push(`/challenges/create/${id}`)
 
@@ -56,7 +57,12 @@ const RankingTable = ({ data, loading }) => {
     },
   ];
 
-  return <Table loading={loading} pagination={false} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
+  return (
+    <>
+      { user && user.gender === typeToGender[type] ? onList ? displayJoinLeaveButton("leave") : displayJoinLeaveButton("join") : null }
+      <Table loading={loading} pagination={false} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
+    </>
+  )
 }
 
 export default RankingTable
