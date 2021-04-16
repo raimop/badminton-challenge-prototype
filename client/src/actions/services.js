@@ -84,3 +84,14 @@ export const fetchChallenges = param => {
 		})
 		.then(handleResponse);
 };
+
+export const createChallenge = (id, data) => {
+	return fetch(`${base}/challenge/create/${id}`, {
+			method: "POST",
+			headers: getHeader({
+				token: true
+			}),
+			body: JSON.stringify(data)
+		})
+		.then(handleResponse);
+};

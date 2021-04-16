@@ -14,6 +14,19 @@ exports.getAll = async (req, res) => {
   }
 }
 
+exports.getOne = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const doc = await Ranking.find({ _id: id }).populate({ path: 'user', select: filter })
+    if (!doc || !doc.length) throw Error(MESSAGES.RANKING.DOES_NOT_EXIST);
+
+    res.status(status.success).json(doc);
+  } catch (e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+}
+
 exports.leave = async (req, res) => {
   try {
     const { user } = req

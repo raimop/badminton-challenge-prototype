@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { getChallengePending, getChallengeSuccess } from '../../redux/challengeSlice';
 import { Table, Divider, message } from 'antd';
-import * as services from "../../actions/services";
 import moment from 'moment-timezone';
+import * as services from "../../actions/services";
 
 const Challenges = () => {
   const user = useSelector(state => state.auth.user);
@@ -38,7 +38,7 @@ const Challenges = () => {
       responsive: ['md'],
       sortDirections: ['ascend', 'descend'],
       sorter: (a, b) => moment(a.info.datetime).unix() - moment(b.info.datetime).unix(),
-      render: (row) => moment(row).format('Do MMMM, HH.mm')
+      render: (row) => moment(row).format('DD MMMM, HH.mm')
     },
     {
       title: 'Koht',

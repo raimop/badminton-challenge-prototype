@@ -9,6 +9,7 @@ import Ranking from "./pages/Ranking";
 import Challenges from "./pages/challenge/Challenges";
 import 'antd/dist/antd.css';
 import './App.css';
+import ChallengeCreate from "./pages/challenge/ChallengeCreate";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route exact path="/signup" component={SignUp}/>
         <Route exact path="/ranking" component={Ranking}/>
         <PrivateRoute exact path="/challenges" component={Challenges}/>
+        <PrivateRoute exact path="/challenges/create/:id" component={ChallengeCreate}/>
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

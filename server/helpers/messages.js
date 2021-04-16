@@ -8,6 +8,12 @@ exports.MESSAGES = {
     SUCCESS_JOIN: "Sa oled edukalt liitunud edetabeliga",
     CANNOT_JOIN: "Sa juba oled liitunud antud edetabeliga",
   },
+  CHALLENGE: {
+    MUST_ENTER_PLACE_TIME: "Peab sisestama koha ja kuupäeva",
+    DATETIME_LESS_THAN_48H: "Väljakutset ei saa esitada vähema kui 48 tunni sees",
+    CANNOT_CHALLENGE_SELF: "Iseendale ei saa väljakutset esitada",
+    BOTH_MUST_BE_JOINED: "Mõlemad kasutajad peavad olema liitunud edetabeliga"
+  },
   USER: {
     NO_INFO: "Kasutaja andmed puuduvad",
     DOES_NOT_EXIST: "Sellist kasutajat ei leitud",
