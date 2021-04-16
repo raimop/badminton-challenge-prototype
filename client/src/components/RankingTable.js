@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";  
 import { Table, Tooltip } from 'antd';
 import { useHistory } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -22,7 +23,9 @@ const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
       title: 'Nimi',
       dataIndex: "user",
       width: "40%",
-      render: row => `${row.firstName} ${row.lastName}`,
+      render: row => {
+        return <Link to={`/challenges/history/${row._id}`}>{row.firstName} {row.lastName}</Link>
+      },
     },
     {
       title: 'Võite',

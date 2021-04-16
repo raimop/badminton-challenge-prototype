@@ -1,5 +1,6 @@
 const Challenge = require('../models/Challenge');
 const Ranking = require('../models/Ranking');
+const User = require('../models/User');
 const { status } = require('../helpers/status');
 const { filter } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
@@ -58,3 +59,29 @@ exports.getAll = async (req, res) => {
     res.status(status.bad).send({ msg: e.message });
   }
 };
+
+exports.history = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findOne({ _id: id }).select(filter);
+    if (!user) throw Error(MESSAGES.USER.DOES_NOT_EXIST)
+
+    let doc = []
+    
+    if (user.preferences.showHistory){
+      doc = await Challenge.find(
+        { $and: [
+          { $or: [{ 'challenger.user': id }, { 'challenged.user': id }] },
+          { $and: [{ 'challenger.resultAccepted': true }, { 'challenged.resultAccepted': true }]}
+          ]
+        })
+        .where("active").equals(true)
+        .populate({ path:"challenger.user challenged.user winner", select:filter })
+    }
+
+    res.status(status.success).send({ user, data: doc });
+  } catch (e) {
+    res.status(status.bad).send({ msg: e.message });
+  }
+}

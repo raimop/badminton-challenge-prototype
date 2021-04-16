@@ -7,9 +7,10 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 import Ranking from "./pages/Ranking";
 import Challenges from "./pages/challenge/Challenges";
+import ChallengeCreate from "./pages/challenge/ChallengeCreate";
+import ChallengeHistory from "./pages/challenge/ChallengeHistory";
 import 'antd/dist/antd.css';
 import './App.css';
-import ChallengeCreate from "./pages/challenge/ChallengeCreate";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/ranking" component={Ranking}/>
         <PrivateRoute exact path="/challenges" component={Challenges}/>
         <PrivateRoute exact path="/challenges/create/:id" component={ChallengeCreate}/>
+        <PrivateRoute exact path="/challenges/history/:id" component={ChallengeHistory}/>
         <Route component={NotFound} />
       </Switch>
     </BrowserRouter>

@@ -95,3 +95,13 @@ export const createChallenge = (id, data) => {
 		})
 		.then(handleResponse);
 };
+
+export const fetchChallengeHistory = id => {
+	return fetch(`${base}/challenge/history/${id}`, {
+			method: "GET",
+			headers: getHeader({
+				token: true
+			}),
+		})
+		.then(handleResponse);
+};
