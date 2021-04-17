@@ -14,7 +14,7 @@ const Ranking = () => {
   const ranking = useSelector(state => state.ranking);
   const { isLoading } = ranking;
   const data = ranking.data || { ms: [], ws: [] };
-  const types = [{ type: "Meesüksikmäng", short: "ms" }, {  type: "Naisüksikmäng", short: "ws" }]
+  const types = [{ type: "Meesüksikmängud", short: "ms" }, {  type: "Naisüksikmängud", short: "ws" }]
 
   useEffect(() => {
     fetchTableData();

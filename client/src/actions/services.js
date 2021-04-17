@@ -105,3 +105,15 @@ export const fetchChallengeHistory = id => {
 		})
 		.then(handleResponse);
 };
+
+/* User */
+
+export const updateUser = () => {
+	return fetch(`${base}/user/update`, {
+			method: "PUT",
+			headers: getHeader({
+				token: true
+			}),
+		})
+		.then(handleResponse);
+};

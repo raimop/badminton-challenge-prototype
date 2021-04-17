@@ -53,4 +53,9 @@ export const logoutAndErase = () => dispatch => {
   localStorage.removeItem("token");
 };
 
+export const updateUser = (payload) => dispatch => {
+  dispatch(updateUserSuccess(payload))
+  localStorage.setItem("user", JSON.stringify(payload));
+};
+
 export default userSlice.reducer;

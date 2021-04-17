@@ -23,6 +23,9 @@ const Header = () => {
   const menu = (
     <Menu>
       <Menu.Item>
+        <Link to="/profile">Profiil</Link> 
+      </Menu.Item>
+      <Menu.Item>
         <Link to="/" onClick={handleLogout}>Logi välja</Link> 
       </Menu.Item>
     </Menu>
@@ -31,7 +34,7 @@ const Header = () => {
   return (
     <header>
       <div className="header--container">
-        <div className="header--logo"><Link to="/"><img className="header--logo--icon" src={BadmintonChallengeLogo} alt="logo" /></Link></div>
+        <div className="header--logo" style={{ width: user ? "12%" : "18%" }}><Link to="/"><img className="header--logo--icon" src={BadmintonChallengeLogo} alt="logo" /></Link></div>
         <nav>
           <ul className="header--links">
             <li><Link to="/ranking">Edetabel</Link></li>
