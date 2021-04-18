@@ -53,16 +53,18 @@ const ChallengeHistory = props => {
   ];
 
   useEffect(() => {
-    fetchRankingsHistory(id).catch(e => message.error(e))
+    fetchRankingsHistory(id);
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fetchRankingsHistory = async id => {
+  const fetchRankingsHistory = id => {
     setLoading(true)
-    const res = await services.fetchChallengeHistory(id)
-
-    setUser(res.user)
-    setData(res.data)
-    setLoading(false)
+    services.fetchChallengeHistory(id)
+      .then(res => {
+        setUser(res.user)
+        setData(res.data)
+        setLoading(false)
+      })
+      .catch(e => message.error(e))
   }
 
   if (user !== null && !user.preferences.showHistory){

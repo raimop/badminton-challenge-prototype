@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { getChallengePending, getChallengeSuccess } from '../../redux/challengeSlice';
-import { Table, Divider, message } from 'antd';
-import moment from 'moment-timezone';
+import { Table, Tooltip, Divider, message } from 'antd';
+import { DeleteTwoTone, StopTwoTone } from "@ant-design/icons"
 import * as services from "../../actions/services";
+import moment from 'moment-timezone';
 
 const Challenges = () => {
   const user = useSelector(state => state.auth.user);
@@ -17,7 +18,9 @@ const Challenges = () => {
       let ar = match.map(e => e.join("-")).join(" | ")
       if (ar === "0-0 | 0-0 | 0-0" || ar === "0-0 | 0-0") return "Kinnitamata"
       return ar
-    }
+    },
+    deleteChallenge: row => <Tooltip title="Kustuta väljakutse"><button onClick={() => deleteChallengeRow(row)}><DeleteTwoTone /></button></Tooltip>,
+    cannotDeleteChallenge: () => <Tooltip title="Väljakutset ei saa kustutada"><StopTwoTone twoToneColor="red" /></Tooltip>,
   }
 
   const columns = [
@@ -55,9 +58,18 @@ const Challenges = () => {
       title: 'Kustuta',
       width: "5%",
       align: 'center',
-      render: (row) => "Kustuta"
+      render: (row) => moment(row.info.datetime).diff(moment(), "minutes") >= 1440 && !(row.challenger.resultAccepted || row.challenged.resultAccepted) ? helpers.deleteChallenge(row) : helpers.cannotDeleteChallenge()
     },
   ];
+
+  const deleteChallengeRow = ({ _id }) => {
+    services.deleteChallenge(_id)
+      .then(res => { 
+        message.success("Väljakutse kustutamine õnnestus") 
+        fetchChallenges();
+      })
+      .catch(e => message.error(e))
+  }
 
   useEffect(() => {
     fetchChallenges();
@@ -81,7 +93,7 @@ const Challenges = () => {
       <div className="container">
         <Table title={() => "Kinnitama väljakutsed"} loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.unconfirmed}/>
         <Divider/>
-        <Table loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.rest}/>
+        <Table rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.rest}/>
       </div>
     </>
   )

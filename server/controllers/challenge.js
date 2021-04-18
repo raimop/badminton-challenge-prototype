@@ -42,6 +42,56 @@ exports.create = async (req, res) => {
   };
 }
 
+exports.accept = async (req, res) => {
+  try {
+    const { user } = req;
+    const { id } = req.params;
+
+    const challenge = await Challenge.findOne({ _id: id })
+    if (!challenge) throw Error(MESSAGES.CHALLENGE.NOT_FOUND)
+    if (challenge.active) throw Error(MESSAGES.CHALLENGE.ALREADY_ACCEPTED)
+
+    if (challenge.challenged.user.toString() !== user._id && challenge.challenger.user.toString() !== user._id){
+      throw Error(MESSAGES.CHALLENGE.MUST_BE_PARTICIPANT)
+    }
+
+    if (challenge.challenged.user.toString() !== user._id){
+      throw Error(MESSAGES.CHALLENGE.CANNOT_ACCEPT)
+    }
+
+    challenge.active = true
+
+    await challenge.save();
+    res.status(status.success).send(challenge)
+  } catch(e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+}
+
+exports.deleteChallenge = async (req, res) => {
+  try {
+    const { user } = req;
+    const { id } = req.params;
+    
+    const challenge = await Challenge.findOne({ _id: id })
+    if (!challenge) throw Error(MESSAGES.CHALLENGE.NOT_FOUND)
+
+    if (challenge.challenged.user.toString() !== user._id && challenge.challenger.user.toString() !== user._id){
+      throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_CHALLENGE_SELF)
+    }
+
+    if (challenge.active && !(moment(challenge.info.datetime).diff(moment(), "minutes") >= 1440)) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_24H)
+    if (challenge.challenger.resultAccepted || challenge.challenged.resultAccepted) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_RESULT)
+
+    const deletedChallenge = await challenge.delete();
+    if (!deletedChallenge) throw Error(MESSAGES.CHALLENGE.ERROR_DELETING)
+
+    res.status(status.success).send(challenge)
+  } catch (e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+};
+
 exports.getAll = async (req, res) => {
   try {
     const { user } = req;

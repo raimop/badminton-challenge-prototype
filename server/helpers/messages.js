@@ -12,7 +12,15 @@ exports.MESSAGES = {
     MUST_ENTER_PLACE_TIME: "Peab sisestama koha ja kuupäeva",
     DATETIME_LESS_THAN_48H: "Väljakutset ei saa esitada vähema kui 48 tunni sees",
     CANNOT_CHALLENGE_SELF: "Iseendale ei saa väljakutset esitada",
-    BOTH_MUST_BE_JOINED: "Mõlemad kasutajad peavad olema liitunud edetabeliga"
+    CANNOT_DELETE_CHALLENGE_SELF: "Ei saa kustutada väljakutset, milles Sa ise ei osale",
+    BOTH_MUST_BE_JOINED: "Mõlemad kasutajad peavad olema liitunud edetabeliga",
+    NOT_FOUND: "Väljakutset ei leitud",
+    CANNOT_DELETE_24H: "Ei saa kustutada väljakutset, mis toimub vähema kui 24 tunni pärast",
+    CANNOT_DELETE_RESULT: "Ei saa kustutada väljakutset, millel on esitatud tulemus",
+    ERROR_DELETING: "Väljakutse kustutamine ebaõnnestus",
+    MUST_BE_PARTICIPANT: "Pead olema üks osalejatest väljakutses selleks, et aktsepteerida",
+    CANNOT_ACCEPT: "Ei saa aktsepteerida väljakutset, mida pole esitatud Sulle",
+    ALREADY_ACCEPTED: "Väljakutse on juba aktsepteeritud"
   },
   USER: {
     NO_INFO: "Kasutaja andmed puuduvad",

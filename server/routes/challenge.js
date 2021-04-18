@@ -8,4 +8,8 @@ router.get("/history/:id", auth, validateId, challengeController.history);
 
 router.post("/create/:id", auth, validateId, challengeController.create);
 
+router.put("/accept/:id", auth, validateId, challengeController.accept);
+
+router.delete("/delete/:id", auth, validateId, challengeController.deleteChallenge);
+
 module.exports = router;

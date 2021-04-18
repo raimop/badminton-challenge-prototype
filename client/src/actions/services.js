@@ -85,6 +85,16 @@ export const fetchChallenges = param => {
 		.then(handleResponse);
 };
 
+export const deleteChallenge = id => {
+	return fetch(`${base}/challenge/delete/${id}`, {
+			method: "DELETE",
+			headers: getHeader({
+				token: true
+			})
+		})
+		.then(handleResponse);
+};
+
 export const createChallenge = (id, data) => {
 	return fetch(`${base}/challenge/create/${id}`, {
 			method: "POST",
