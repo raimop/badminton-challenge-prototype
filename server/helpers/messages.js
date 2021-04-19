@@ -36,5 +36,8 @@ exports.MESSAGES = {
     INVALID_FIELD_VALUES: "Palun täida väljad korrektselt",
     ERROR_SIGNING_JWT: "Viga tähise kirjastamisel",
     INVALID_CREDENTIALS: "Vale e-mail või parool",
+  },
+  NOTIFICATION: {
+    DOES_NOT_EXIST: "Sellist teadet ei leitud"
   }
 }

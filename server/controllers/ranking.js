@@ -4,9 +4,12 @@ const { status } = require('../helpers/status');
 const { MESSAGES } = require('../helpers/messages');
 
 exports.getAll = async (req, res) => {
+  const sortOption = { points: -1 }
+  const populateOption = { path: 'user', select: filter }
+
   try {
-    const ms = await Ranking.find({ category: "ms" }).sort({ points: -1 }).populate({ path: 'user', select: filter })
-    const ws = await Ranking.find({ category: "ws" }).sort({ points: -1 }).populate({ path: 'user', select: filter })
+    const ms = await Ranking.find({ category: "ms" }).sort(sortOption).populate(populateOption)
+    const ws = await Ranking.find({ category: "ws" }).sort(sortOption).populate(populateOption)
 
     res.status(status.success).json({ ms, ws });
   } catch (e) {
