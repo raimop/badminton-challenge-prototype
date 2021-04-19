@@ -74,7 +74,7 @@ const ChallengeHistory = props => {
   return ( 
     <div className="container">
       { user && <h1 className="text-center">Kasutaja <strong>{user.firstName} {user.lastName}</strong> väljakutsete ajalugu</h1> }
-      <Table loading={loading} locale={{ emptyText: "Andmed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
+      <Table loading={loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Andmed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
     </div>
   ); 
 }; 

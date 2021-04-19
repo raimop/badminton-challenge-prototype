@@ -39,7 +39,17 @@ const Challenges = () => {
     {
       title: 'Tulemus',
       dataIndex:  "result",
-      render: (field) => helpers.score(field)
+      render: (field, row) => {
+        if (!row.challenger.resultAccepted || !row.challenged.resultAccepted) return "Kinnitamata"
+        if (row.winner._id !== user._id){
+          let arr = []
+          for (let i = 0; i < field.length; i++){
+            arr.push([field[i][1], field[i][0]])
+          }
+          return helpers.score(arr)
+        } 
+        return helpers.score(field)
+      }
     },
     {
       title: 'Aeg',
