@@ -85,6 +85,17 @@ export const fetchChallenges = param => {
 		.then(handleResponse);
 };
 
+export const updateChallenge = (id, data) => {
+	return fetch(`${base}/challenge/update/${id}`, {
+			method: "PUT",
+			headers: getHeader({
+				token: true
+			}),
+			body: JSON.stringify(data)
+		})
+		.then(handleResponse);
+};
+
 export const deleteChallenge = id => {
 	return fetch(`${base}/challenge/delete/${id}`, {
 			method: "DELETE",

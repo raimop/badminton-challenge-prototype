@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { getChallengePending, getChallengeSuccess } from '../../redux/challengeSlice';
 import { Table, Tooltip, Divider, message } from 'antd';
-import { DeleteTwoTone, StopTwoTone } from "@ant-design/icons"
+import { useHistory } from "react-router-dom";
+import { CheckCircleTwoTone, ClockCircleTwoTone, EditTwoTone, DeleteTwoTone, StopTwoTone, IssuesCloseOutlined } from "@ant-design/icons"
 import * as services from "../../actions/services";
 import moment from 'moment-timezone';
 
@@ -11,6 +12,7 @@ const Challenges = () => {
   const challenges = useSelector(state => state.challenge);
   const { isLoading } = challenges;
   const data = challenges.data || { unconfirmed: [], rest: [] }
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const helpers = {
@@ -19,8 +21,12 @@ const Challenges = () => {
       if (ar === "0-0 | 0-0 | 0-0" || ar === "0-0 | 0-0") return "Kinnitamata"
       return ar
     },
+    submitResult: (row) => <Tooltip title="Esita tulemus"><button onClick={() => submitResult(row)}><EditTwoTone /></button></Tooltip>,
+    waitForResult: () => <Tooltip title="Oota vastase esitamist"><ClockCircleTwoTone/></Tooltip>,
+    resultConfirmed: () => <Tooltip title="Tulemus on kinnitatud"><CheckCircleTwoTone twoToneColor="#52c41a"/></Tooltip>,
     deleteChallenge: row => <Tooltip title="Kustuta väljakutse"><button onClick={() => deleteChallengeRow(row)}><DeleteTwoTone /></button></Tooltip>,
     cannotDeleteChallenge: () => <Tooltip title="Väljakutset ei saa kustutada"><StopTwoTone twoToneColor="red" /></Tooltip>,
+    dateHasNotPassed: () => <Tooltip title="Väljakutse kuupäev pole möödunud"><IssuesCloseOutlined /></Tooltip>
   }
 
   const columns = [
@@ -52,7 +58,18 @@ const Challenges = () => {
       title: 'Tegevus',
       width: "5%",
       align: 'center',
-      render: (row) => "Tegevus"
+      render: (row) => {
+        //if (moment(row.info.datetime).diff(moment()) >= 0) return helpers.dateHasNotPassed()
+        if (row.challenger.resultAccepted && row.challenged.resultAccepted) return helpers.resultConfirmed()
+        if (user._id === row.challenger.user._id){
+          if (!row.challenger.resultAccepted) return helpers.submitResult(row)
+          if (!row.challenged.resultAccepted) return helpers.waitForResult()
+        } else {
+          if (!row.challenged.resultAccepted) return helpers.submitResult(row)
+          if (!row.challenger.resultAccepted) return helpers.waitForResult()
+        }
+        return helpers.submitResult(row)
+      }
     },
     {
       title: 'Kustuta',
@@ -61,6 +78,8 @@ const Challenges = () => {
       render: (row) => moment(row.info.datetime).diff(moment(), "minutes") >= 1440 && !(row.challenger.resultAccepted || row.challenged.resultAccepted) ? helpers.deleteChallenge(row) : helpers.cannotDeleteChallenge()
     },
   ];
+
+  const submitResult = row => history.push(`/challenges/update/${row._id}`);
 
   const deleteChallengeRow = ({ _id }) => {
     services.deleteChallenge(_id)

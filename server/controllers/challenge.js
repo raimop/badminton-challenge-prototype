@@ -2,7 +2,7 @@ const Challenge = require('../models/Challenge');
 const Ranking = require('../models/Ranking');
 const User = require('../models/User');
 const { status } = require('../helpers/status');
-const { filter } = require('../helpers/utils');
+const { filter, updatePoints } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
 const moment = require("moment-timezone");
 moment.updateLocale('et', { months : [ "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember" ]});
@@ -92,6 +92,63 @@ exports.deleteChallenge = async (req, res) => {
   }
 };
 
+exports.update = async (req, res) => {
+  try {
+    const { user } = req;
+    const { score, winner } = req.body;
+    const { id } = req.params;
+    
+    const challenge = await Challenge.findOne({ _id: id })
+      .populate({ path:"challenger.user challenged.user", select:filter })
+    if (!challenge) throw Error(MESSAGES.CHALLENGE.DOES_NOT_EXIST)
+
+    if (challenge.challenged.user._id.toString() !== user._id && challenge.challenger.user._id.toString() !== user._id){
+      throw Error(MESSAGES.CHALLENGE.CANNOT_UPDATE_CHALLENGE_SELF)
+    }
+
+    /* if(moment(challenge.info.datetime).diff(moment()) >= 0){
+      throw Error(MESSAGES.CHALLENGE.CANNOT_UPDATE_FUTURE_CHALLENGE)
+    } */
+
+    if (challenge.winner == null){
+      challenge.winner = winner;
+      challenge.result = score;
+    } else {
+      if (winner != challenge.winner || !score.every((outerElem, outerIndex) => outerElem.every((innerElem, innerIndex) => innerElem === challenge.result[outerIndex][innerIndex]))){
+        if (challenge.challenger.user._id.toString() === user._id) {
+          challenge.challenged.resultAccepted = false
+        } else {
+          challenge.challenger.resultAccepted = false
+        } 
+        
+        challenge.result = score;
+        challenge.winner = winner;
+      }
+    }
+
+    if (challenge.challenger.user._id.toString() === user._id) {
+      challenge.challenger.resultAccepted = true
+    } else {
+      challenge.challenged.resultAccepted = true;
+    }
+
+    if (challenge.challenger.resultAccepted && challenge.challenged.resultAccepted){
+      if (challenge.winner.toString() === challenge.challenger.user._id.toString()){
+        finalResult = { winner: challenge.challenger, loser: challenge.challenged }
+      } else {
+        finalResult = { winner: challenge.challenged, loser: challenge.challenger }
+      }
+      updatePoints(finalResult)
+    }
+
+    const doc = await challenge.save()
+
+    res.status(status.success).send(doc)
+  } catch (e) {
+    res.status(status.bad).send({ msg: e.message });
+  }
+};
+
 exports.getAll = async (req, res) => {
   try {
     const { user } = req;
@@ -101,8 +158,23 @@ exports.getAll = async (req, res) => {
         { 'challenger.user': user._id },
         { 'challenged.user': user._id }]
       })
-      .where("active").equals(true)
+      //.where("active").equals(true)
       .populate({ path:"challenger.user challenged.user winner", select:filter })
+
+    res.status(status.success).send(doc)
+  } catch (e) {
+    res.status(status.bad).send({ msg: e.message });
+  }
+};
+
+exports.getOne = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const doc = await Challenge.findOne({ _id: id })
+      .populate({ path: "challenger.user challenged.user winner", select:filter })
+
+    if (!doc) throw Error(MESSAGES.CHALLENGE.DOES_NOT_EXIST)
 
     res.status(status.success).send(doc)
   } catch (e) {
