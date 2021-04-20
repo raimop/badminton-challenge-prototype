@@ -7,11 +7,13 @@ const Home = () => {
   const user = useSelector(state => state.auth.user);
 
   return ( 
+    <>
     <main className="container">
       <h1>Sulgpalli väljakutse rakendus</h1> 
       <p>Selleks, et esitada väljakutse, on vaja registreerida ja liituda edetabeliga</p>
-      { user && <><Divider/><Notifications title={"Kiirvaade teadetest"}/></> }
     </main> 
+    { user && <><Divider/><Notifications title={"Kiirvaade teadetest"}/></> }
+    </>
   ); 
 }; 
 export default Home;

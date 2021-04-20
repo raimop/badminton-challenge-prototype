@@ -2,10 +2,12 @@ const Challenge = require('../models/Challenge');
 const Ranking = require('../models/Ranking');
 const User = require('../models/User');
 const { status } = require('../helpers/status');
-const { filter, updatePoints } = require('../helpers/utils');
+const { filter, createNotification, updatePoints } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
 const moment = require("moment-timezone");
 moment.updateLocale('et', { months : [ "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember" ]});
+
+const shortTimeFormat = 'DD.MM HH.mm'
 
 exports.create = async (req, res) => {
   try {
@@ -33,6 +35,8 @@ exports.create = async (req, res) => {
         address
       },
     })
+
+    createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)}`, challenge)
 
     const data = await challenge.save();
 
