@@ -33,7 +33,7 @@ const ChallengeHistory = props => {
       sortDirections: ['ascend', 'descend'],
       
       sorter: (a, b) => moment(a.info.datetime).unix() - moment(b.info.datetime).unix(),
-      render: (row) => moment(row).format('Do MMMM')
+      render: (row) => moment(row).format('DD MMMM')
     },
     {
       title: 'Tulemus',

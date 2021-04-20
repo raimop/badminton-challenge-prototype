@@ -43,6 +43,14 @@ button {
   top: initial;
 }
 
+.attribution {
+  font-size: 10px;
+}
+
+.attribution a {
+  color: black;
+}
+
 @media screen and (max-width: 768px) {
   .custom-button {
     padding: .25em .5em;
