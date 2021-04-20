@@ -127,6 +127,49 @@ export const fetchChallengeHistory = id => {
 		.then(handleResponse);
 };
 
+/* Notifications */
+
+export const fetchNotifications = () => {
+	return fetch(`${base}/notification/`, {
+			method: "GET",
+			headers: getHeader({
+				token: true
+			}),
+		})
+		.then(handleResponse);
+};
+
+export const updateNotification = (id, data) => {
+	return fetch(`${base}/notification/update/${id}`, {
+			method: "PUT",
+			headers: getHeader({
+				token: true
+			}),
+			body: JSON.stringify(data)
+		})
+		.then(handleResponse);
+};
+
+export const deleteNotification = id => {
+	return fetch(`${base}/notification/delete/${id}`, {
+			method: "DELETE",
+			headers: getHeader({
+				token: true
+			})
+		})
+		.then(handleResponse);
+};
+
+export const deleteAllNotification = () => {
+	return fetch(`${base}/notification/deleteAll`, {
+			method: "DELETE",
+			headers: getHeader({
+				token: true
+			})
+		})
+		.then(handleResponse);
+};
+
 /* User */
 
 export const updateUser = () => {

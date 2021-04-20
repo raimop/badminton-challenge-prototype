@@ -41,7 +41,7 @@ const Header = () => {
             { user && (
                 <>
                   <li><Link to="/challenges">Väljakutsed</Link></li>
-                  <li><Link to="/">Teated</Link></li>
+                  <li><Link to="/notifications">Teated</Link></li>
                 </>
               )
             }
