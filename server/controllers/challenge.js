@@ -87,6 +87,17 @@ exports.deleteChallenge = async (req, res) => {
     if (challenge.active && !(moment(challenge.info.datetime).diff(moment(), "minutes") >= 1440)) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_24H)
     if (challenge.challenger.resultAccepted || challenge.challenged.resultAccepted) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_RESULT)
 
+    let sendTo, content;
+    if (!challenge.active){
+      sendTo = challenge.challenger.user
+      content = `${user.firstName} ${user.lastName} loobus Sinu esitatud väljakutsest.`
+    } else {
+      sendTo = challenge.challenged.user.toString() === user._id ? challenge.challenger.user : challenge.challenged.user
+      content = `${user.firstName} ${user.lastName} kustutas teievahelise väljakutse, mis oli kuupäeval ${moment(challenge.info.datetime).format(shortTimeFormat)}.`
+    }
+    
+    createNotification(sendTo, content)
+
     const deletedChallenge = await challenge.delete();
     if (!deletedChallenge) throw Error(MESSAGES.CHALLENGE.ERROR_DELETING)
 
