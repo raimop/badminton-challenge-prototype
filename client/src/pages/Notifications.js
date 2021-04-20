@@ -18,7 +18,32 @@ const Notifications = ({ title }) => {
   const columns = [
     {
       title: 'Sisu',
-      render: row => clickableToggleRead(row)
+      render: row => {
+        if (!row.challenge || row.challenge.active) return clickableToggleRead(row)
+        return <>
+          { clickableToggleRead(row) }
+          <br/>
+          <Popconfirm
+            title={`Oled kindel, et tahad väljakutset aktsepteerida?`}
+            onConfirm={() => acceptChallenge(row)}
+            onCancel={() => message.success("Väljakutse aktsepteerimine peatatud")}
+            okText="Jah"
+            cancelText="Ei"
+          >
+          <Button type="primary" shape="round" size="small" style={{ marginRight: "5px", marginBottom: "5px" }}><CheckCircleTwoTone twoToneColor="#52c41a"/> nõustu</Button>
+          </Popconfirm>
+
+          <Popconfirm
+            title={`Oled kindel, et tahad väljakutsest loobuda?`}
+            onConfirm={() => deleteChallenge(row)}
+            onCancel={() => message.success("Väljakutsest loobumine peatatud")}
+            okText="Jah"
+            cancelText="Ei"
+          >
+          <Button type="primary" shape="round" size="small"><StopTwoTone twoToneColor="red" /> loobu</Button>
+          </Popconfirm>
+        </>
+      }
     },
     {
       title: 'Kuupäev',
@@ -39,6 +64,26 @@ const Notifications = ({ title }) => {
       render: row => <button onClick={() => deleteNotification(row)}><DeleteTwoTone /></button>
     },
   ];
+
+  const acceptChallenge = row => {
+    services.acceptChallenge(row.challenge._id)
+      .then(res => {
+        message.success("Väljakutse aktsepteerimine õnnestus")
+        fetchNotifications();
+        if (!row.read) toggleNotificationRead(row)
+      })
+      .catch(e => message.error("Viga väljakutse aktsepteerimisel"))
+  }
+
+  const deleteChallenge = (row) => {
+    services.deleteChallenge(row.challenge._id)
+      .then(res => {
+        message.success("Väljakutse loobumine õnnestus")
+        fetchNotifications();
+        if (!row.read) toggleNotificationRead(row)
+      })
+      .catch(e => message.error("Viga väljakutsest loobumisel"))
+  }
 
   const deleteNotification = row => {
     services.deleteNotification(row._id)

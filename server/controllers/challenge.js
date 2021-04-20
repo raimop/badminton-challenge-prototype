@@ -65,6 +65,9 @@ exports.accept = async (req, res) => {
 
     challenge.active = true
 
+    let content = `${user.firstName} ${user.lastName} aktsepteeris teievahelise väljakutse, mis toimub ${moment(challenge.info.datetime).format(shortTimeFormat)}.`
+    createNotification(challenge.challenger.user, content)
+
     await challenge.save();
     res.status(status.success).send(challenge)
   } catch(e) {
