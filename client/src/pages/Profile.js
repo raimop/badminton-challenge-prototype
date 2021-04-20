@@ -21,7 +21,7 @@ const Profile = () => {
   return ( 
     <main className="container">
       <h1 className="text-center">Profiil</h1>
-      <h1>Tere, {`${user.firstName} ${user.lastName}`}</h1> 
+      <h2>Tere, {`${user.firstName} ${user.lastName}`}</h2> 
       <p>Kas soovid, et teised näeksid Sinu väljakutsete ajalugu?   
         <Switch
           size="middle"
