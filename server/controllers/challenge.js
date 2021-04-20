@@ -150,13 +150,21 @@ exports.update = async (req, res) => {
       challenge.challenged.resultAccepted = true;
     }
 
+    let message = "", messageTime, messageWinner, finalResult = {};
+
     if (challenge.challenger.resultAccepted && challenge.challenged.resultAccepted){
+      messageTime = moment(challenge.info.datetime).format(shortTimeFormat)
       if (challenge.winner.toString() === challenge.challenger.user._id.toString()){
         finalResult = { winner: challenge.challenger, loser: challenge.challenged }
+        messageWinner = `${challenge.challenger.user.firstName} ${challenge.challenger.user.lastName}`
       } else {
         finalResult = { winner: challenge.challenged, loser: challenge.challenger }
+        messageWinner = `${challenge.challenged.user.firstName} ${challenge.challenged.user.lastName}`
       }
+      message = `${messageTime} tulemus kinnitati, väljakutse võitis ${messageWinner} tulemusega ${challenge.result.map(e => e.join("-")).join(" | ")}`
       updatePoints(finalResult)
+      createNotification(challenge.challenger.user, message)
+      createNotification(challenge.challenged.user, message)
     }
 
     const doc = await challenge.save()
