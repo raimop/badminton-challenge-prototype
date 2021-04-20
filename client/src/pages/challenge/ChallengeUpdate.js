@@ -148,7 +148,7 @@ const ChallengeUpdate = props => {
         message.success("Tulemus esitatud")
         history.push(`/challenges`);
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga väljakutse uuendamisel"))
   }
 
   const displayGamePoints = () => {

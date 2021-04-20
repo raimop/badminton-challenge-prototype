@@ -25,8 +25,8 @@ const Ranking = () => {
     services.fetchRankings()
       .then(res => dispatch(getRankingSuccess(res)))
       .catch(e => { 
-        dispatch(getRankingFail(e)) 
-        message.error(e)
+        dispatch(getRankingFail("Viga edetabeli pärimisel")) 
+        message.error("Viga edetabeli pärimisel")
       })
   }
 
@@ -36,7 +36,7 @@ const Ranking = () => {
         fetchTableData();
         message.success(`Oled ${decision.toLowerCase().concat("nud")} edetabeli${decision === "Liitu" ? "ga" : "st"}`)
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error(`Viga edetabelist ${decision.toLowerCase()}misega`))
   }
 
   const displayJoinLeaveButton = input => {

@@ -31,8 +31,8 @@ const Login = () => {
       history.push("/");
     })
     .catch(e => {
-      dispatch(getUserFail(e));
-      message.error(e)
+      dispatch(getUserFail("Viga sisselogimisel"));
+      message.error("Viga sisselogimisel")
     });
   };
 

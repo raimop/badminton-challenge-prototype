@@ -63,7 +63,7 @@ const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
   return (
     <>
       { user && user.gender === typeToGender[type] ? onList ? displayJoinLeaveButton("leave") : displayJoinLeaveButton("join") : null }
-      <Table loading={loading} pagination={false} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
+      <Table loading={loading} pagination={false} locale={{ emptyText: "Osalejad puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
     </>
   )
 }

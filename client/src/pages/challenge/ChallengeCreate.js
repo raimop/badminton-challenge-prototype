@@ -30,7 +30,7 @@ const ChallengeCreate = props => {
       .then(res => {
         setRanking(res[0])
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga vastase edetabeli andmete pärimisel"))
   }
   
   const createChallenge = data => {
@@ -39,7 +39,7 @@ const ChallengeCreate = props => {
         message.success("Väljakutse edukalt esitatud")
         history.push("/ranking");
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga väljakutse esitamisel"))
   }
 
   return ( 

@@ -97,7 +97,7 @@ const Challenges = () => {
         message.success("Väljakutse kustutamine õnnestus") 
         fetchChallenges();
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga väljakutse kustutamisel"))
   }
 
   useEffect(() => {
@@ -113,16 +113,16 @@ const Challenges = () => {
           rest: res.filter(e => (e.challenger.resultAccepted && e.challenged.resultAccepted))
         }))
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga väljakutsete pärimisel"))
   }
 
   return (
     <>
       <h1 className="text-center">Väljakutsed</h1>
       <div className="container">
-        <Table title={() => "Kinnitama väljakutsed"} loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.unconfirmed}/>
+        <Table title={() => "Kinnitama väljakutsed"} loading={isLoading} locale={{ emptyText: "Kinnitamata väljakutsed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.unconfirmed}/>
         <Divider/>
-        <Table rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.rest}/>
+        <Table rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } loading={isLoading} locale={{ emptyText: "Väljakutsed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.rest}/>
       </div>
     </>
   )

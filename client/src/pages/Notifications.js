@@ -46,7 +46,7 @@ const Notifications = ({ title }) => {
         message.success(`Teade edukalt kustutatud`)
         fetchNotifications();
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga teate kustutamisel"))
   }
 
   const deleteAllNotification = () => {
@@ -55,13 +55,13 @@ const Notifications = ({ title }) => {
         message.success(`Kõik teated Edukalt kustutatud`)
         fetchNotifications();
       })
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga kõikide teadete kustutamisel"))
   }
 
   const toggleNotificationRead = row => {
     services.updateNotification(row._id)
       .then(res => fetchNotifications())
-      .catch(e => message.error(e))
+      .catch(e => message.error("Viga loetuks/mitteloetuks märkimisel"))
   }
 
   useEffect(() => {
@@ -72,7 +72,10 @@ const Notifications = ({ title }) => {
     dispatch(getNotificationPending())
     services.fetchNotifications()
       .then(res => dispatch(getNotificationSuccess(res)))
-      .catch(e => dispatch(getNotificationFail(e)))
+      .catch(e => {
+        dispatch(getNotificationFail("Viga teadete pärimisel"))
+        message.error("Viga teadete pärimisel")
+      })
   }
 
   return ( 
@@ -93,7 +96,7 @@ const Notifications = ({ title }) => {
           </Popconfirm>
         </div>
       }
-        <Table rowClassName={record => !record.read ? "unread" : null } loading={isLoading} locale={{ emptyText: "Andmed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
+        <Table rowClassName={record => !record.read ? "unread" : null } loading={isLoading} locale={{ emptyText: "Teated puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
       </div>
     </>
   ); 

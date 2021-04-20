@@ -26,7 +26,7 @@ const SignUp = () => {
       history.push("/login");
       message.success("Registreeritud!")
     })
-    .catch(e => message.error(e))
+    .catch(e => message.error("Viga registreerumisel"))
   };
 
   return (    
