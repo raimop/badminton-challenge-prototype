@@ -38,7 +38,7 @@ const Header = () => {
   }, [])
 
   const toggleNav = () => {
-    if (navRef.current){
+    if (navRef.current && window.innerWidth < 576){
       if (navRef.current.classList.contains("show-nav")){
         navRef.current.classList.remove("show-nav")
         navRef.current.firstChild.classList.remove("show-nav-ul")
