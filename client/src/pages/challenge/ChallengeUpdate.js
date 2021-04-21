@@ -123,7 +123,6 @@ const ChallengeUpdate = props => {
     setLoading(true)
     services.fetchChallenges(id)
       .then(res => {
-        console.log(res)
         setData([res])
         setOpponent(res.challenger.user._id === user._id ? res.challenged.user : res.challenger.user)
         setUserHelper(user._id === res.challenger.user._id ? "challenger" : "challenged")
@@ -204,10 +203,10 @@ const ChallengeUpdate = props => {
                 size={"large"}
                 onFieldsChange={onChange}
               >
-                <h2 className="title-center">Võitja: { winner != null ? `${winner.firstName} ${winner.lastName}` : "määramata" } </h2>
                 <Row className="title-center">
                   { displayGamePoints(6) }
                 </Row>
+                <h2 className="title-center">Võitja: { winner != null ? `${winner.firstName} ${winner.lastName}` : "määramata" } </h2>
                 <Form.Item style={{ textAlign: "center" }}>
                   <Button disabled={!validScore} type="primary" htmlType="submit" style={{ width: "50%" }}>
                     Saada tulemus

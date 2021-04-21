@@ -31,6 +31,7 @@ const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
       title: 'Võite',
       align: 'right',
       dataIndex: 'wins',
+      responsive: ['md'],
     },
     {
       title: 'Kaotuseid',

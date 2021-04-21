@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react"; 
+import { useSelector } from 'react-redux';
 import { message, Table } from 'antd';
+import { useHistory } from "react-router-dom";
 import moment from 'moment-timezone';
 import * as services from "../../actions/services";
 
 const ChallengeHistory = props => { 
+  const history = useHistory();
+  const user = useSelector(state => state.auth.user);
   const { id } = props.match.params;
   const [data, setData] = useState([])
-  const [user, setUser] = useState(null)
+  const [historyUser, setHistoryUser] = useState(null)
+  const [ranking, setRanking] = useState(null)
   const [loading, setLoading] = useState(false)
 
   const helpers = {
@@ -24,7 +29,7 @@ const ChallengeHistory = props => {
   const columns = [
     {
       title: 'Vastane',
-      render: row => user && (user._id === row.challenger.user._id) ? `${row.challenged.user.firstName} ${row.challenged.user.lastName}` : `${row.challenger.user.firstName} ${row.challenger.user.lastName}`
+      render: row => historyUser && (historyUser._id === row.challenger.user._id) ? `${row.challenged.user.firstName} ${row.challenged.user.lastName}` : `${row.challenger.user.firstName} ${row.challenger.user.lastName}`
     },
     {
       title: 'Aeg',
@@ -40,7 +45,7 @@ const ChallengeHistory = props => {
       dataIndex:  "result",
       render: (field, row) => {
         if (!row.challenger.resultAccepted || !row.challenged.resultAccepted) return "Kinnitamata"
-        if (user && row.winner._id !== user._id){
+        if (historyUser && row.winner._id !== historyUser._id){
           let arr = []
           for (let i = 0; i < field.length; i++){
             arr.push([field[i][1], field[i][0]])
@@ -60,21 +65,23 @@ const ChallengeHistory = props => {
     setLoading(true)
     services.fetchChallengeHistory(id)
       .then(res => {
-        setUser(res.user)
+        setHistoryUser(res.user)
         setData(res.data)
+        setRanking(res.ranking)
         setLoading(false)
       })
       .catch(e => message.error("Viga väljakutsete ajaloo pärimisel"))
   }
 
-  if (user !== null && !user.preferences.showHistory){
-    return <h1 className="text-center">Kasutaja <strong>{user.firstName} {user.lastName}</strong> on valinud peita enda väljakutsete ajalugu</h1>
+  if (historyUser !== null && !historyUser.preferences.showHistory){
+    return <h1 className="text-center">Kasutaja <strong>{historyUser.firstName} {historyUser.lastName}</strong> on valinud peita enda väljakutsete ajalugu</h1>
   }
 
   return ( 
     <div className="container">
-      { user && <h1 className="text-center">Kasutaja <strong>{user.firstName} {user.lastName}</strong> väljakutsete ajalugu</h1> }
-      <Table loading={loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Väljakutsed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
+      { historyUser && <h1 className="text-center">Kasutaja <strong>{historyUser.firstName} {historyUser.lastName}</strong> väljakutsete ajalugu</h1> }
+      { ranking && user._id !== historyUser._id && <button className="custom-button" onClick={() => history.push(`/challenges/create/${ranking._id}`)}>Esita talle väljakutse</button>}
+      <Table loading={loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === historyUser._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Väljakutsed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
     </div>
   ); 
 }; 

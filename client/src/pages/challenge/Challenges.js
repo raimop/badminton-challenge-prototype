@@ -120,6 +120,7 @@ const Challenges = () => {
     <>
       <h1 className="text-center">Väljakutsed</h1>
       <div className="container">
+        <button className="custom-button" onClick={() => history.push(`/ranking`)}>Esita uus väljakutse</button>
         <Table title={() => "Kinnitama väljakutsed"} loading={isLoading} locale={{ emptyText: "Kinnitamata väljakutsed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.unconfirmed}/>
         <Divider/>
         <Table rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === user._id ? "won-match" : "lost-match" : null } loading={isLoading} locale={{ emptyText: "Väljakutsed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.rest}/>

@@ -9,7 +9,7 @@ const ConfirmRegistration = props => {
 
   useEffect(() => {
     verifyUser(confirmationCode);
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const verifyUser = confirmationCode => {
     services.verifyUser(confirmationCode)
