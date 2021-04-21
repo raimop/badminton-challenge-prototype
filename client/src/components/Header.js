@@ -23,7 +23,11 @@ const Header = () => {
   }
 
   const handleResize = () => {
-    if (window.innerWidth > 576) document.body.classList.remove("disable-scrolling")
+    if (window.innerWidth > 576) {
+      if (document.body.classList.contains("disable-scrolling")) document.body.classList.remove("disable-scrolling")
+    } else {
+      if (showingNav && !document.body.classList.contains("disable-scrolling")) document.body.classList.add("disable-scrolling")
+    }
   }
 
   useEffect(() => {
