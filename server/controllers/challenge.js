@@ -4,6 +4,7 @@ const User = require('../models/User');
 const { status } = require('../helpers/status');
 const { filter, createNotification, updatePoints } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
+const nodemailer = require("../nodemailer");
 const moment = require("moment-timezone");
 moment.updateLocale('et', { months : [ "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember" ]});
 
@@ -20,7 +21,7 @@ exports.create = async (req, res) => {
     const { id } = req.params;
     if (user._id === id) throw Error(MESSAGES.CHALLENGE.CANNOT_CHALLENGE_SELF)
     
-    const doc = await Ranking.find({ "user": [user._id, id] }).populate({ path: 'user', select: filter })
+    const doc = await Ranking.find({ "user": [user._id, id] }).populate({ path: 'user', select: ["-password", "-createdAt", "-__v"] })
   
     if (!doc || doc.length !== 2){
       throw Error(MESSAGES.CHALLENGE.BOTH_MUST_BE_JOINED)
@@ -37,6 +38,12 @@ exports.create = async (req, res) => {
     })
 
     createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)}`, challenge)
+
+    let posi = doc.findIndex(e => e.user._id.toString() === id)
+
+    if (doc[posi].user.preferences.emailNotif){
+      nodemailer.sendNewChallengeEmail(doc[posi].user.email, doc[posi].user.firstName, user.firstName);
+    }
 
     const data = await challenge.save();
 

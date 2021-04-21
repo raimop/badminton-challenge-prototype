@@ -48,6 +48,16 @@ export const login = ({
 		.then(handleResponse);
 };
 
+export const verifyUser = (
+	code
+) => {
+	return fetch(`${base}/auth/confirm/${code}`, {
+		method: "GET",
+		headers: getHeader(),
+	})
+	.then(handleResponse);
+}
+
 /* Ranking */
 
 export const fetchRankings = param => {
@@ -182,12 +192,13 @@ export const deleteAllNotification = () => {
 
 /* User */
 
-export const updateUser = () => {
+export const updateUser = data => {
 	return fetch(`${base}/user/update`, {
 			method: "PUT",
 			headers: getHeader({
 				token: true
 			}),
+			body: JSON.stringify(data)
 		})
 		.then(handleResponse);
 };

@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import * as services from "../../actions/services";
 
 const { Option } = Select;
-const layout = { wrapperCol: { span: 24 } };
+const layout = { wrapperCol: { span: 28 } };
 
 const styles = {
   ul: { textAlign: "left", fontWeight: "600", listStyle: "none", padding: "0 1em", width: "225px", margin: "0 auto 5vh auto" },

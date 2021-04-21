@@ -10,6 +10,7 @@ import Challenges from "./pages/challenge/Challenges";
 import ChallengeCreate from "./pages/challenge/ChallengeCreate";
 import ChallengeUpdate from "./pages/challenge/ChallengeUpdate";
 import ChallengeHistory from "./pages/challenge/ChallengeHistory";
+import ConfirmRegistration from "./pages/ConfirmRegistration";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import 'antd/dist/antd.css';
@@ -24,6 +25,7 @@ function App() {
         <Route exact path="/login" component={Login}/>
         <Route exact path="/signup" component={SignUp}/>
         <Route exact path="/ranking" component={Ranking}/>
+        <Route exact path="/confirm/:confirmationCode" component={ConfirmRegistration} />
         <PrivateRoute exact path="/challenges" component={Challenges}/>
         <PrivateRoute exact path="/challenges/create/:id" component={ChallengeCreate}/>
         <PrivateRoute exact path="/challenges/update/:id" component={ChallengeUpdate}/>

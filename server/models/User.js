@@ -8,7 +8,10 @@ const userSchema = new Schema({
   password: { type: String, required: true },
   preferences: {
     showHistory: { type: Boolean, default: true },
+    emailNotif: { type: Boolean, default: true }
   },
+  status: { type: String, enum: ['pending', 'active'], default: 'pending' },
+  confirmationCode: { type: String, unique: true },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -32,7 +32,7 @@ const Login = () => {
     })
     .catch(e => {
       dispatch(getUserFail("Viga sisselogimisel"));
-      message.error("Viga sisselogimisel")
+      message.error(e)
     });
   };
 
@@ -61,7 +61,7 @@ const Login = () => {
           name="password"
           rules={[
             { required: true, message: 'Palun sisesta parool!' },
-            { min: 6, message: 'Peab olema vähemalt 6 tähemärki pikk' }
+            { min: 6, message: 'Vähemalt 6 tähemärki pikk' }
           ]}
         >
           <Input.Password

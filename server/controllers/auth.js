@@ -2,7 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { status } = require('../helpers/status');
+const { createNotification } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
+const nodemailer = require("../nodemailer");
 
 exports.login = async (req, res) => {
   const {
@@ -13,6 +15,8 @@ exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
+
+    if (user.status !== "active") throw Error(MESSAGES.USER.PLEASE_CONFIRM_EMAIL)
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
@@ -60,31 +64,45 @@ exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(password, salt);
     if (!hash) throw Error(MESSAGES.USER.ERROR_HASING);
 
+    const confirmationToken = jwt.sign({ email }, process.env.JWT_SECRET);
+
     const newUser = new User({
       firstName,
       lastName,
       gender,
       email,
-      password: hash
+      password: hash,
+      confirmationCode: confirmationToken
     });
 
     const savedUser = await newUser.save();
-    if (!savedUser) throw Error(MESSAGES.USER.ERROR_SAVING);    
+    if (!savedUser) throw Error(MESSAGES.USER.ERROR_SAVING);
+    
+    nodemailer.sendConfirmationEmail(firstName, email, confirmationToken)
+    createNotification(newUser._id, `Tere tulemast ${firstName} ja aitäh, et liitusid sulgpalli väljakutsete rakenduse keskkonnaga.`)
 
-    const userTemplate = {
-      _id: savedUser._id,
-      firstName: savedUser.firstName,
-      lastName: savedUser.lastName,
-      gender: savedUser.gender,
-    }
-
-    const token = jwt.sign(userTemplate, process.env.JWT_SECRET);
-
-    res.status(status.success).json({
-      token,
-      user: userTemplate
-    });
+    res.status(status.success).json({ msg: MESSAGES.USER.CREATED_SUCCESSFULLY });
   } catch (e) {
     res.status(status.bad).json({ msg: e.message });
   }
 }
+
+exports.verifyUser = async (req, res, next) => {
+  try {
+    const { confirmationCode } = req.params;
+
+    const user = await User.findOne({ confirmationCode })
+
+    if (!user) throw Error(MESSAGES.USER.INCORRECT_TOKEN);
+    if (user.status === "active") throw Error(MESSAGES.USER.ALREADY_ACTIVATED);
+
+    user.status = "active"
+
+    const savedUser = await user.save();
+    if (!savedUser) throw Error(MESSAGES.USER.ERROR_SAVING);
+
+    res.status(status.success).json({ msg: MESSAGES.USER.CONFIRMED_SUCCESSFULLY });
+  } catch (e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+};

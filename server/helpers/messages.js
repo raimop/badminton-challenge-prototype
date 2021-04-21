@@ -23,7 +23,7 @@ exports.MESSAGES = {
     MUST_BE_PARTICIPANT: "Pead olema üks osalejatest väljakutses selleks, et aktsepteerida",
     CANNOT_ACCEPT: "Ei saa aktsepteerida väljakutset, mida pole esitatud Sulle",
     ALREADY_ACCEPTED: "Väljakutse on juba aktsepteeritud",
-    CANNOT_UPDATE_FUTURE_CHALLENGE: "Ei saa sisestada tulemust väljakutsele, mis toimub tulevikus"
+    CANNOT_UPDATE_FUTURE_CHALLENGE: "Ei saa sisestada tulemust väljakutsele, mis toimub tulevikus",
   },
   USER: {
     NO_INFO: "Kasutaja andmed puuduvad",
@@ -36,6 +36,11 @@ exports.MESSAGES = {
     INVALID_FIELD_VALUES: "Palun täida väljad korrektselt",
     ERROR_SIGNING_JWT: "Viga tähise kirjastamisel",
     INVALID_CREDENTIALS: "Vale e-mail või parool",
+    PLEASE_CONFIRM_EMAIL: "Palun kinnita enda e-posti aadress",
+    CREATED_SUCCESSFULLY: "Kasutaja loodud edukalt",
+    INCORRECT_TOKEN: "Ebakorrektne kinnituskood",
+    ALREADY_ACTIVATED: "Kasutaja konto on juba aktiviseeritud",
+    CONFIRMED_SUCCESSFULLY: "Kasutaja kinnitatud edukalt, saate nüüd sisse logida"
   },
   NOTIFICATION: {
     DOES_NOT_EXIST: "Sellist teadet ei leitud"

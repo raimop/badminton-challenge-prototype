@@ -10,6 +10,8 @@ const validationMiddleware = (req, res, next) => {
   next();
 };
 
+router.get("/confirm/:confirmationCode", authController.verifyUser)
+
 router.post('/login', 
   [
     check("email").isEmail().normalizeEmail().withMessage("Peab olema korrektne e-mail"),
