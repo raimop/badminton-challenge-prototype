@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <Row type="flex" justify="flex-start" align="center" style={{minHeight: '85vh'}}>
+    <Row type="flex" justify="flex-start" align="center">
       <Form
         {...layout}
         name="login"
@@ -46,9 +46,10 @@ const Login = () => {
           remember: true,
         }}
         onFinish={onFinish}
-        size={"large"}
+        size={"middle"}
+        style={{ width: 200 }}
       >
-        <h1 style={{ textAlign: "center" }}>Logi sisse</h1>
+        <h1 className="text-center">Logi sisse</h1>
         <Form.Item
           name="email"
           rules={[

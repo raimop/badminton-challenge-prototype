@@ -44,8 +44,9 @@ const SignUp = () => {
           initialValues={{ remember: true, }}
           onFinish={onFinish}
           size={"middle"}
+          style={{ width: 200 }}
         >
-          <h1 style={{ textAlign: "center" }}>Registreeru</h1>
+          <h1 className="text-center">Registreeru</h1>
           <Form.Item
             name="firstName"
             rules={[
