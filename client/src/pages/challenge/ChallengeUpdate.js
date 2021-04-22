@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"; 
 import { useSelector } from 'react-redux';
-import { Table, Form, Select, Popconfirm, Divider, Row, Col, Button, message } from 'antd';
+import { Alert, Table, Form, Select, Popconfirm, Divider, Row, Col, Button, message } from 'antd';
 import { QuestionOutlined } from "@ant-design/icons"
 import { useHistory } from "react-router-dom";  
 import * as services from "../../actions/services";
@@ -192,7 +192,7 @@ const ChallengeUpdate = props => {
                   <button className="custom-button">Aktsepteeri tulemust ({data[0].winner.firstName + " " + data[0].winner.lastName} võitis seisuga {data[0].result.map(e => e.join("-")).join(" | ")})</button> 
                   </Popconfirm>
                   
-                  : 
+                  :   
                   "Ootame vastase tulemust" 
             }
             <Divider/>
@@ -203,6 +203,14 @@ const ChallengeUpdate = props => {
                 size={"large"}
                 onFieldsChange={onChange}
               >
+                <Alert
+                  style={{ textAlign: "left" }}
+                  message="Tulemuse sisestamine"
+                  description="Sisesta tulemust enda vaatevinklist - Sinu punktid üleval, vastase punktid all-"
+                  type="info"
+                  showIcon
+                />
+                <Divider/>
                 <Row className="title-center">
                   { displayGamePoints(6) }
                 </Row>

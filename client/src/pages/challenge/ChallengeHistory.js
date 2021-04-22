@@ -80,7 +80,7 @@ const ChallengeHistory = props => {
   return ( 
     <div className="container">
       { historyUser && <h1 className="text-center">Kasutaja <strong>{historyUser.firstName} {historyUser.lastName}</strong> väljakutsete ajalugu</h1> }
-      { ranking && user._id !== historyUser._id && <button className="custom-button" onClick={() => history.push(`/challenges/create/${ranking._id}`)}>Esita talle väljakutse</button>}
+      { ranking && user._id !== historyUser._id && user.gender === historyUser.gender && <button className="custom-button" onClick={() => history.push(`/challenges/create/${ranking._id}`)}>Esita talle väljakutse</button>}
       <Table loading={loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === historyUser._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Väljakutsed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
     </div>
   ); 

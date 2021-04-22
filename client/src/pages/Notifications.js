@@ -7,7 +7,7 @@ import * as services from "../actions/services";
 import moment from 'moment-timezone';
 import "./Notifications.css"
 
-const Notifications = ({ title }) => { 
+const Notifications = ({ title, pagination = false }) => { 
   const notifications = useSelector(state => state.notifications);
   const data = notifications.data || [];
   const { isLoading } = notifications;
@@ -141,7 +141,7 @@ const Notifications = ({ title }) => {
           </Popconfirm>
         </div>
       }
-        <Table rowClassName={record => !record.read ? "unread" : null } loading={isLoading} locale={{ emptyText: "Teated puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
+        <Table rowClassName={record => !record.read ? "unread" : null } pagination={pagination} loading={isLoading} locale={{ emptyText: "Teated puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
       </div>
     </>
   ); 

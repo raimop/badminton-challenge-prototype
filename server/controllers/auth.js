@@ -16,7 +16,7 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
 
-    if (user.status !== "active") throw Error(MESSAGES.USER.PLEASE_CONFIRM_EMAIL)
+    //if (user.status !== "active") throw Error(MESSAGES.USER.PLEASE_CONFIRM_EMAIL)
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) throw Error(MESSAGES.USER.INVALID_CREDENTIALS);
