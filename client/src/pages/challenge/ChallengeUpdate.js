@@ -5,6 +5,7 @@ import { QuestionOutlined } from "@ant-design/icons"
 import { useHistory } from "react-router-dom";  
 import * as services from "../../actions/services";
 import moment from 'moment-timezone';
+import "./ChallengeUpdate.css"
 
 const { Option } = Select;
 
@@ -17,6 +18,7 @@ const ChallengeUpdate = props => {
   const [winner, setWinner] = useState(null)
   const [opponent, setOpponent] = useState(null)
   const [userHelper, setUserHelper] = useState(null)
+  const [showScoreInfo, setShowScoreInfo] = useState(localStorage.getItem("show-score-submit-info") ? JSON.parse(localStorage.getItem("show-score-submit-info")) : true)
   const user = useSelector(state => state.auth.user);
   const history = useHistory();
 
@@ -63,6 +65,10 @@ const ChallengeUpdate = props => {
   useEffect(() => {
     fetchChallenge();
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    localStorage.setItem("show-score-submit-info", showScoreInfo)
+  }, [showScoreInfo])
 
   const onFinish = data => {
     if (!winner){
@@ -171,14 +177,15 @@ const ChallengeUpdate = props => {
 
   return ( 
     <>
-      <h1 className="text-center">Sisesta väljakutse tulemus</h1>
       <div className="container">
+        <h1>Sisesta väljakutse tulemus</h1>
+        { !showScoreInfo && <div className="text-right"><div className="score-info-show" onClick={() => setShowScoreInfo(true)}>Näita tulemuse sisestamise juhendit</div></div> }
         <Table loading={loading} locale={{ emptyText: "Andmed puuduvad" }} pagination={false}  columns={columns} rowKey='_id' dataSource={data}/>
         <Divider/>
         { userHelper &&
           <>
             { data.length > 0 && data[0].winner == null ? 
-                "Ole esimene, kes sisestab tulemust" 
+                <p>Ole esimene, kes sisestab tulemust</p>
                 : 
                 !data[0][userHelper].resultAccepted ? 
                   <Popconfirm
@@ -193,29 +200,35 @@ const ChallengeUpdate = props => {
                   </Popconfirm>
                   
                   :   
-                  "Ootame vastase tulemust" 
+                  <p>Ootame vastase tulemust</p>
             }
             <Divider/>
             <Row type="flex" justify="flex-start" align="center">
               <Form
                 name="submitScore"
                 onFinish={onFinish}
-                size={"large"}
+                size={"middle"}
                 onFieldsChange={onChange}
               >
-                <Alert
-                  style={{ textAlign: "left" }}
-                  message="Tulemuse sisestamine"
-                  description="Sisesta tulemust enda vaatevinklist - Sinu punktid üleval, vastase punktid all-"
-                  type="info"
-                  showIcon
-                />
-                <Divider/>
-                <Row className="title-center">
-                  { displayGamePoints(6) }
+                { showScoreInfo &&
+                  <>
+                    <Alert
+                      className="text-left"
+                      message="Tulemuse sisestamise juhend"
+                      description="Sisesta tulemust enda vaatevinklist - Sinu punktid üleval, vastase punktid all-"
+                      type="info"
+                      showIcon
+                      onClose={() => setShowScoreInfo(false)}
+                      closable
+                    />
+                    <Divider/>
+                  </>
+                }
+                <Row>
+                  { displayGamePoints() }
                 </Row>
-                <h2 className="title-center">Võitja: { winner != null ? `${winner.firstName} ${winner.lastName}` : "määramata" } </h2>
-                <Form.Item style={{ textAlign: "center" }}>
+                <h2>Võitja: { winner != null ? `${winner.firstName} ${winner.lastName}` : "määramata" } </h2>
+                <Form.Item>
                   <Button disabled={!validScore} type="primary" htmlType="submit" style={{ width: "50%" }}>
                     Saada tulemus
                   </Button>
@@ -224,7 +237,7 @@ const ChallengeUpdate = props => {
             </Row>
           </>
           }
-        </div>
+      </div>
     </>
   ); 
 }; 

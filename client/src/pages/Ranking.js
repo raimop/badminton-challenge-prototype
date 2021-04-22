@@ -60,8 +60,8 @@ const Ranking = () => {
 
   return (
     <>
-      <h1 className="text-center">Edetabel</h1>
       <div className="container">
+        <h1>Edetabel</h1>
         <Tabs defaultActiveKey={defaultActiveKey} onChange={key => setDefaultActiveKey(key)}>
           {
             types.map((e, i) => (

@@ -13,7 +13,7 @@ const Notifications = ({ title, pagination = false }) => {
   const { isLoading } = notifications;
   const dispatch = useDispatch();
 
-  const clickableToggleRead = row => <span style={{ cursor: "pointer" }} onClick={() => toggleNotificationRead(row, row.read)}>{row.content}</span>
+  const clickableToggleRead = row => <span style={{ cursor: "pointer" }} onClick={() => toggleNotificationRead(row)}>{row.content}</span>
 
   const columns = [
     {
@@ -56,7 +56,7 @@ const Notifications = ({ title, pagination = false }) => {
     {
       title: 'Märgi',
       responsive: ['md'],
-      render: row => <button onClick={() => toggleNotificationRead(row, row.read)}> { !row.read ? "Loetuks" : "Mitte\u00ADloetuks" } </button>
+      render: row => <button onClick={() => toggleNotificationRead(row)}> { !row.read ? "Loetuks" : "Mitte\u00ADloetuks" } </button>
     },
     {
       title: 'Kustuta',
@@ -125,22 +125,22 @@ const Notifications = ({ title, pagination = false }) => {
 
   return ( 
     <>
-      <h1 className="text-center">{ title }</h1>
       <div className="container">
-      { data.length >= 1 &&
-        <div style={{ display: "flex" }}>
-          <Popconfirm
-            icon={<QuestionOutlined style={{ color: 'red' }} />}
-            title={`Oled kindel, et tahad kõik teated kustutada?`}
-            onConfirm={() => deleteAllNotification()}
-            onCancel={() => message.success('Tegevus peatatud')}
-            okText="Jah"
-            cancelText="Ei"
-          >
-            <button className="custom-button"><DeleteOutlined /> Kustuta kõik teated</button>
-          </Popconfirm>
-        </div>
-      }
+        <h1>{ title }</h1>
+        { data.length >= 1 &&
+          <div style={{ display: "flex" }}>
+            <Popconfirm
+              icon={<QuestionOutlined style={{ color: 'red' }} />}
+              title={`Oled kindel, et tahad kõik teated kustutada?`}
+              onConfirm={() => deleteAllNotification()}
+              onCancel={() => message.success('Tegevus peatatud')}
+              okText="Jah"
+              cancelText="Ei"
+            >
+              <button className="custom-button"><DeleteOutlined /> Kustuta kõik teated</button>
+            </Popconfirm>
+          </div>
+        }
         <Table rowClassName={record => !record.read ? "unread" : null } pagination={pagination} loading={isLoading} locale={{ emptyText: "Teated puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>
       </div>
     </>

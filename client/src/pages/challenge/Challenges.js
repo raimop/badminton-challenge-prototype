@@ -118,8 +118,8 @@ const Challenges = () => {
 
   return (
     <>
-      <h1 className="text-center">Väljakutsed</h1>
       <div className="container">
+        <h1>Väljakutsed</h1>
         <button className="custom-button" onClick={() => history.push(`/ranking`)}>Esita uus väljakutse</button>
         <Table title={() => "Kinnitama väljakutsed"} loading={isLoading} locale={{ emptyText: "Kinnitamata väljakutsed puuduvad" }} columns={columns} rowKey='_id' pagination={false} dataSource={data.unconfirmed}/>
         <Divider/>

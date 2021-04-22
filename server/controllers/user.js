@@ -6,14 +6,18 @@ const { filter } = require('../helpers/utils');
 exports.update = async (req, res) => {
   try {
     const { user } = req;
+    const { showHistory, emailNotif } = req.body;
 
     const userFound = await User.findOne({ _id: user._id }).select(filter)
-    userFound.preferences.showHistory = !userFound.preferences.showHistory
     if (!userFound) throw Error(MESSAGES.USER.DOES_NOT_EXIST);
+    
+    userFound.preferences.showHistory = showHistory
+    userFound.preferences.emailNotif = emailNotif
+    
 
-    userFound.save()
+    const savedUser = await userFound.save()
 
-    res.status(status.success).send(userFound);
+    res.status(status.success).send(savedUser);
   } catch (e) {
     res.status(status.bad).json({ msg: e.message });
   }

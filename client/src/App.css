@@ -38,6 +38,14 @@ button {
   margin-bottom: 10px;
 }
 
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
 .ant-message {
   bottom: 20px;
   top: initial;

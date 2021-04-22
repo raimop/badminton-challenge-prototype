@@ -10,6 +10,8 @@ const Profile = () => {
   const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
 
+  console.log(user.preferences.emailNotif)
+
   const onFinish = data => {
     services.updateUser(data).then(
       res => {
@@ -22,7 +24,7 @@ const Profile = () => {
 
   return ( 
     <main className="container">
-      <h1 className="text-center">Profiil</h1>
+      <h1>Profiil</h1>
       <h2>Tere, {`${user.firstName} ${user.lastName}`}</h2> 
       <Row type="flex" justify="flex-start" align="center">
         <Form

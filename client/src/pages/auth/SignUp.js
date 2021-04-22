@@ -28,6 +28,7 @@ const SignUp = () => {
       setRegistered(true)
     })
     .catch(e => {
+      if (e instanceof Error) return message.error("Viga serveriga") 
       message.error(e)
     })
   };

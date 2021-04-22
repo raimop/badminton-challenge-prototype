@@ -32,6 +32,7 @@ const Login = () => {
     })
     .catch(e => {
       dispatch(getUserFail("Viga sisselogimisel"));
+      if (e instanceof Error) return message.error("Viga serveriga") 
       message.error(e)
     });
   };

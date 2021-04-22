@@ -27,7 +27,8 @@ exports.login = async (req, res) => {
       lastName: user.lastName,
       gender: user.gender,
       preferences: {
-        showHistory: user.preferences.showHistory
+        showHistory: user.preferences.showHistory,
+        emailNotif: user.preferences.emailNotif
       }
     }
 
