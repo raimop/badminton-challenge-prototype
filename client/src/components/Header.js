@@ -2,11 +2,16 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Link } from "react-router-dom";  
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { Menu, Dropdown, message } from 'antd';
+import { Menu, Dropdown, message, notification, Button } from 'antd';
 import { DownOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons"
+import { getNotificationSuccess } from '../redux/notificationSlice';
 import { logoutAndErase } from '../redux/authSlice';
+import io from "socket.io-client";
+import * as services from "../actions/services";
 import BadmintonChallengeLogo from "../logo.svg"
 import "./Header.css";
+
+const socket = io();
 
 const Header = () => {
   const user = useSelector(state => state.auth.user);
@@ -14,6 +19,18 @@ const Header = () => {
   const history = useHistory();
   const navRef = useRef(null);
   const [showingNav, setShowingNav] = useState(false)
+
+  const openNotification = data => {
+    const key = `open${Date.now()}`;
+    const btn = (<Button type="primary" size="small" onClick={() => notification.close(key)}> Sulge </Button>);
+    notification.open({
+      message: 'Uus teade',
+      description: data,
+      placement: 'bottomRight',
+      btn,
+      key
+    });
+  };
 
   const handleLogout = e => {
     e.preventDefault();
@@ -29,6 +46,25 @@ const Header = () => {
       if (navRef && navRef.current.classList.contains("show-nav") && !document.body.classList.contains("disable-scrolling")) document.body.classList.add("disable-scrolling")
     }
   }
+
+  const updateNotifications = () => {
+    services.fetchNotifications()
+      .then(res => dispatch(getNotificationSuccess(res)))
+      .catch(e => console.log(e))
+  }
+  
+  useEffect(() => {
+    const handleNotification = data => {
+      if (window.location.pathname === "/notifications") updateNotifications();
+      openNotification(data)
+    }
+
+    if (user) socket.on(user._id, handleNotification);
+
+    return () => {
+      if (user) socket.off(user._id, handleNotification);
+    }
+  }, [user])
 
   useEffect(() => {
     window.addEventListener("resize", handleResize)

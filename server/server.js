@@ -2,6 +2,12 @@ const express = require("express");
 const mongoose = require('mongoose');
 const path = require ("path")
 const cors = require("cors");
+const app = express();
+const server = require('http').createServer(app);
+const { Server } = require("socket.io")
+const io = new Server(server, { cors: { origin: '*' } });
+const Notification = require('./models/Notification');
+const changeStream = Notification.watch()
 const PORT = process.env.PORT || 8080;
 require('dotenv').config();
 
@@ -11,7 +17,17 @@ const challengeRoutes = require('./routes/challenge');
 const notificationRoutes = require('./routes/notification');
 const userRoutes = require('./routes/user');
 
-const app = express();
+io.on("connection", (socket) => {
+  /* console.log("New client connected"); */
+  changeStream.on('change', change => {
+    if (change.operationType === 'insert'){
+      socket.emit(change.fullDocument.to, change.fullDocument.content);
+    }
+  })
+  /* socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  }) */
+});
 
 app.use(cors());
 app.use(express.json());
@@ -34,4 +50,4 @@ if (process.env.NODE_ENV === 'production') {
   app.get('*', (req, res) => res.sendFile(buildPath + "/index.html"))
 }
 
-app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
+server.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
