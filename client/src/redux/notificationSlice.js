@@ -17,6 +17,22 @@ export const notificationSlice = createSlice({
     error: ""
   },
   reducers: {
+    removeChallengeFromNotification: (state, { payload }) => {
+      const id = state.data.findIndex(e => e._id === payload.id);
+      console.log(state.data[id])
+      state.data[id].challenge = null
+      console.log(state.data[id])
+    },
+    removeAllNotifications: state => {
+      state.data = []
+    },
+    removeNotification: (state, { payload }) => {
+      state.data = state.data.filter(e => e._id !== payload.id)
+    },
+    toggleNotification: (state, { payload }) => {
+      const id = state.data.findIndex(e => e._id === payload.id);
+      state.data[id].read = state.data[id].read ? 0 : 1
+    },
     getNotificationPending: state => {
       state.isLoading = true;
     },
@@ -30,8 +46,20 @@ export const notificationSlice = createSlice({
       state.error = payload;
     },
   },
+  extraReducers: {
+    [fetchNotifications.pending]: (state, action) => {
+      state.isLoading = true
+    },
+    [fetchNotifications.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.data = action.payload
+    },
+    [fetchNotifications.rejected]: (state, action) => {
+      state.error = action.error
+    }
+  }
 });
 
-export const { getNotificationPending, getNotificationSuccess, getNotificationFail } = notificationSlice.actions;
+export const { getNotificationPending, getNotificationSuccess, getNotificationFail, removeNotification, removeAllNotifications, toggleNotification, removeChallengeFromNotification, addNotification } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

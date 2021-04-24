@@ -1,7 +1,7 @@
-import React, { useEffect } from "react"; 
+import React, { useEffect, useState } from "react"; 
 import { Table, message, Popconfirm, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNotifications } from '../redux/notificationSlice';
+import { fetchNotifications, toggleNotification, removeAllNotifications, removeNotification, removeChallengeFromNotification } from '../redux/notificationSlice';
 import { CheckCircleTwoTone, StopTwoTone, DeleteTwoTone, QuestionOutlined, DeleteOutlined } from "@ant-design/icons"
 import * as services from "../actions/services";
 import moment from 'moment-timezone';
@@ -9,9 +9,13 @@ import "./Notifications.css"
 
 const Notifications = ({ title }) => { 
   const notifications = useSelector(state => state.notifications);
-  const data = notifications.data || [];
+  const [data, setData] = useState(notifications.data || [])
   const { isLoading } = notifications;
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setData(notifications.data)
+  }, [notifications])
 
   const clickableToggleRead = row => <span style={{ cursor: "pointer" }} onClick={() => toggleNotificationRead(row)}>{row.content}</span>
 
@@ -69,7 +73,7 @@ const Notifications = ({ title }) => {
     services.acceptChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse aktsepteerimine õnnestus")
-        dispatch(fetchNotifications());
+        dispatch(removeChallengeFromNotification({ id: row._id }));
         if (!row.read) toggleNotificationRead(row)
       })
       .catch(e => message.error("Viga väljakutse aktsepteerimisel"))
@@ -79,7 +83,7 @@ const Notifications = ({ title }) => {
     services.deleteChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse loobumine õnnestus")
-        dispatch(fetchNotifications());
+        dispatch(removeChallengeFromNotification({ id: row._id }));
         if (!row.read) toggleNotificationRead(row)
       })
       .catch(e => message.error("Viga väljakutsest loobumisel"))
@@ -89,7 +93,7 @@ const Notifications = ({ title }) => {
     services.deleteNotification(row._id)
       .then(res => {
         message.success(`Teade edukalt kustutatud`)
-        dispatch(fetchNotifications());
+        dispatch(removeNotification({ id: row._id }))
       })
       .catch(e => message.error("Viga teate kustutamisel"))
   }
@@ -97,15 +101,17 @@ const Notifications = ({ title }) => {
   const deleteAllNotification = () => {
     services.deleteAllNotification()
       .then(res => {
-        message.success(`Kõik teated Edukalt kustutatud`)
-        dispatch(fetchNotifications());
+        message.success(`Kõik teated edukalt kustutatud`)
+        dispatch(removeAllNotifications())
       })
       .catch(e => message.error("Viga kõikide teadete kustutamisel"))
   }
 
   const toggleNotificationRead = row => {
     services.updateNotification(row._id)
-      .then(res => dispatch(fetchNotifications()))
+      .then(res => {
+        dispatch(toggleNotification({ id: row._id }))
+      })
       .catch(e => message.error("Viga loetuks/mitteloetuks märkimisel"))
   }
 

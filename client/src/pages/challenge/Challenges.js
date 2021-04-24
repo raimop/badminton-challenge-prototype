@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { CheckCircleTwoTone, ClockCircleTwoTone, EditTwoTone, DeleteTwoTone, StopTwoTone, IssuesCloseOutlined } from "@ant-design/icons"
 import * as services from "../../actions/services";
 import moment from 'moment-timezone';
+import { updateChallenges, removeChallenge } from '../../redux/challengeSlice';
 
 const Challenges = () => {
   const user = useSelector(state => state.auth.user);
@@ -12,6 +13,7 @@ const Challenges = () => {
   const { isLoading } = challenges;
   const data = challenges.data || { unconfirmed: [], rest: [] }
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const helpers = {
     score: match => {
@@ -89,10 +91,15 @@ const Challenges = () => {
 
   const submitResult = row => history.push(`/challenges/update/${row._id}`);
 
+  useEffect(() => {
+    dispatch(updateChallenges())
+  }, [])
+
   const deleteChallengeRow = ({ _id }) => {
     services.deleteChallenge(_id)
       .then(res => { 
         message.success("Väljakutse kustutamine õnnestus") 
+        dispatch(removeChallenge({ id: _id }))
         //fetchChallenges();
       })
       .catch(e => message.error("Viga väljakutse kustutamisel"))

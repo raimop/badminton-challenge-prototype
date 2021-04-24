@@ -20,6 +20,9 @@ export const challengeSlice = createSlice({
     error: ""
   },
   reducers: {
+    removeChallenge: (state, { payload }) => {
+      state.data.unconfirmed = state.data.unconfirmed.filter(e => e._id !== payload.id)
+    },
     getChallengePending: state => {
       state.isLoading = true;
     },
@@ -47,6 +50,6 @@ export const challengeSlice = createSlice({
   }
 });
 
-export const { getChallengePending, getChallengeSuccess, getChallengeFail } = challengeSlice.actions;
+export const { getChallengePending, getChallengeSuccess, getChallengeFail, removeChallenge } = challengeSlice.actions;
 
 export default challengeSlice.reducer;

@@ -20,8 +20,9 @@ const userRoutes = require('./routes/user');
 io.on("connection", (socket) => {
   /* console.log("New client connected"); */
   changeStream.on('change', change => {
+    console.log(change)
     if (change.operationType === 'insert'){
-      socket.emit(change.fullDocument.to, change.fullDocument.content);
+      socket.emit(change.fullDocument.to, change.fullDocument);
     }
   })
   /* socket.on("disconnect", () => {

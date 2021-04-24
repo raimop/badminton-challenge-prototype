@@ -38,8 +38,8 @@ const ChallengeCreate = props => {
   }
 
   return ( 
-    <main className="container">
-      <h1>Esita väljakutse vastasele <strong>{ ranking && `${ranking.user.firstName} ${ranking.user.lastName}` }</strong></h1>
+    <main>
+      <h1 className="text-center">Esita väljakutse vastasele <strong>{ ranking && `${ranking.user.firstName} ${ranking.user.lastName}` }</strong></h1>
       {
         ranking ?
           <Row type="flex" justify="flex-start" align="center">

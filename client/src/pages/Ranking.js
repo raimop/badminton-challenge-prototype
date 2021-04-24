@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getRankingPending, getRankingSuccess, getRankingFail, updateRankings } from '../redux/rankingSlice';
+import { updateRankings } from '../redux/rankingSlice';
 import { Tabs, Popconfirm, message } from 'antd';
 import { QuestionOutlined, CheckCircleFilled } from '@ant-design/icons';
 import RankingTable from "../components/RankingTable"

@@ -28,12 +28,12 @@ function App() {
   const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
 
-  const openNotification = data => {
+  const openNotification = content => {
     const key = `open${Date.now()}`;
     const btn = (<Button type="primary" size="small" onClick={() => notification.close(key)}> Sulge </Button>);
     notification.open({
       message: 'Uus teade',
-      description: data,
+      description: content,
       placement: 'bottomRight',
       btn,
       key
@@ -51,7 +51,7 @@ function App() {
     const handleNotification = data => {
       dispatch(fetchNotifications())
       dispatch(updateChallenges())
-      openNotification(data);
+      openNotification(data.content);
     }
 
     if (user) socket.on(user._id, handleNotification);

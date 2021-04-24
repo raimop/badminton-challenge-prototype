@@ -37,6 +37,8 @@ exports.create = async (req, res) => {
       },
     })
 
+    console.log(challenge)
+
     createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)}`, challenge)
 
     let posi = doc.findIndex(e => e.user._id.toString() === id)
@@ -97,12 +99,11 @@ exports.deleteChallenge = async (req, res) => {
     if (challenge.active && !(moment(challenge.info.datetime).diff(moment(), "minutes") >= 1440)) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_24H)
     if (challenge.challenger.resultAccepted || challenge.challenged.resultAccepted) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_RESULT)
 
-    let sendTo, content;
+    let sendTo = challenge.challenged.user.toString() === user._id ? challenge.challenger.user : challenge.challenged.user;
+    let content;
     if (!challenge.active){
-      sendTo = challenge.challenged.user
       content = `${user.firstName} ${user.lastName} loobus Sinu esitatud väljakutsest.`
     } else {
-      sendTo = challenge.challenged.user.toString() === user._id ? challenge.challenger.user : challenge.challenged.user
       content = `${user.firstName} ${user.lastName} kustutas teievahelise väljakutse, mis oli kuupäeval ${moment(challenge.info.datetime).format(shortTimeFormat)}.`
     }
     
