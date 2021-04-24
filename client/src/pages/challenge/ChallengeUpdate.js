@@ -11,14 +11,16 @@ const { Option } = Select;
 
 const ChallengeUpdate = props => { 
   const { id } = props.match.params;
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
   const [hideThirdGame, setHideThirdGame] = useState(true)
   const [validScore, setValidScore] = useState(false)
   const [winner, setWinner] = useState(null)
-  const [opponent, setOpponent] = useState(null)
-  const [userHelper, setUserHelper] = useState(null)
   const [showScoreInfo, setShowScoreInfo] = useState(localStorage.getItem("show-score-submit-info") ? JSON.parse(localStorage.getItem("show-score-submit-info")) : true)
+  const [state, setState] = useState({
+    data: [],
+    opponent: null,
+    user: null,
+    loading: false,
+  })
   const user = useSelector(state => state.auth.user);
   const history = useHistory();
 
@@ -75,7 +77,7 @@ const ChallengeUpdate = props => {
       message.error("Võitja ei ole määratud")
       return 
     }
-    let score = [[data[0],data[3]],[data[1],data[4]],[data[2],data[5]]]
+    let score = [[data[1],data[4]],[data[2],data[5]],[data[3],data[6]]]
     if (hideThirdGame) score.pop()
     if (winner._id !== user._id){
       score = normalizeScore(score)
@@ -115,7 +117,7 @@ const ChallengeUpdate = props => {
       if ((g1U > g1D && g2U > g2D && validateTwoGames) || (!hideThirdGame && (g1U > g1D && g2U < g2D && g3U > g3D) && validateThreeGames) || (!hideThirdGame && (g1U < g1D && g2U > g2D && g3U > g3D) && validateThreeGames)){
         setWinner(user)
       } else if ((g1U < g1D && g2U < g2D && validateTwoGames) || (!hideThirdGame && (g1U > g1D && g2U < g2D && g3U < g3D) && validateThreeGames) || (!hideThirdGame && (g1U < g1D && g2U > g2D && g3U < g3D) && validateThreeGames)){
-        setWinner(opponent)
+        setWinner(state.opponent)
       } else {
         setWinner(null)
       }
@@ -126,13 +128,19 @@ const ChallengeUpdate = props => {
   }
 
   const fetchChallenge = () => {
-    setLoading(true)
+    setState({
+      ...state,
+      loading: true
+    })
+
     services.fetchChallenges(id)
       .then(res => {
-        setData([res])
-        setOpponent(res.challenger.user._id === user._id ? res.challenged.user : res.challenger.user)
-        setUserHelper(user._id === res.challenger.user._id ? "challenger" : "challenged")
-        setLoading(false)
+        setState({
+          data: [res],
+          opponent: res.challenger.user._id === user._id ? res.challenged.user : res.challenger.user,
+          user: user._id === res.challenger.user._id ? "challenger" : "challenged",
+          loading: false
+        })
       })
       .catch(e => {
         console.log(e)
@@ -158,14 +166,13 @@ const ChallengeUpdate = props => {
 
   const displayGamePoints = () => {
     const allPoints = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-    const games = ["1.", "2.", "3."]
     let children = []
-    for (let i = 0; i < 6; i++){
+    for (let i = 1; i <= 6; i++){
       children.push((
         <Col span={8} key={i}>
-          <h2>{ i < 3 && `${games[i]} geim` }</h2>
+          <h2>{ i <= 3 && `${[i]}. geim` }</h2>
           <Form.Item initialValue={0} name={i} rules={[ { required: true, message: 'Sisesta tulemus' }, ]} >
-            <Select disabled={(i === 2 || i === 5) && hideThirdGame} style={{ width: 120 }}>
+            <Select disabled={(i === 3 || i === 6) && hideThirdGame} style={{ width: 120 }}>
               { allPoints.map(e => <Option key={e} value={e}>{e}</Option>) }
             </Select>
           </Form.Item>
@@ -180,23 +187,23 @@ const ChallengeUpdate = props => {
       <div className="container">
         <h1>Sisesta väljakutse tulemus</h1>
         { !showScoreInfo && <div className="text-right"><div className="score-info-show" onClick={() => setShowScoreInfo(true)}>Näita tulemuse sisestamise juhendit</div></div> }
-        <Table loading={loading} locale={{ emptyText: "Andmed puuduvad" }} pagination={false}  columns={columns} rowKey='_id' dataSource={data}/>
+        <Table loading={state.loading} locale={{ emptyText: "Andmed puuduvad" }} pagination={false}  columns={columns} rowKey='_id' dataSource={state.data}/>
         <Divider/>
-        { userHelper &&
+        { state.user &&
           <>
-            { data.length > 0 && data[0].winner == null ? 
+            { state.data && state.data[0].winner == null ? 
                 <p>Ole esimene, kes sisestab tulemust</p>
                 : 
-                !data[0][userHelper].resultAccepted ? 
+                !state.data[0][state.user].resultAccepted ? 
                   <Popconfirm
                     icon={<QuestionOutlined style={{ color: 'red' }} />}
                     title={`Oled kindel, et tahad tulemust aktsepteerida?`}
-                    onConfirm={() => updateChallenge({ winner: data[0].winner._id, score: data[0].result })}
+                    onConfirm={() => updateChallenge({ winner: state.data[0].winner._id, score: state.data[0].result })}
                     onCancel={() => message.success("Tulemuse aktsepteerimine peatatud")}
                     okText="Jah"
                     cancelText="Ei"
                   >
-                  <button className="custom-button">Aktsepteeri tulemust ({data[0].winner.firstName + " " + data[0].winner.lastName} võitis seisuga {data[0].result.map(e => e.join("-")).join(" | ")})</button> 
+                  <button className="custom-button">Aktsepteeri tulemust ({state.data[0].winner.firstName + " " + state.data[0].winner.lastName} võitis seisuga {state.data[0].result.map(e => e.join("-")).join(" | ")})</button> 
                   </Popconfirm>
                   
                   :   
@@ -215,7 +222,7 @@ const ChallengeUpdate = props => {
                     <Alert
                       className="text-left"
                       message="Tulemuse sisestamise juhend"
-                      description="Sisesta tulemust enda vaatevinklist - Sinu punktid üleval, vastase punktid all-"
+                      description="Sisesta tulemus enda vaatevinklist vaadatuna - Sinu punktid üleval, vastase punktid all."
                       type="info"
                       showIcon
                       onClose={() => setShowScoreInfo(false)}

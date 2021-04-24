@@ -100,7 +100,6 @@ const Challenges = () => {
       .then(res => { 
         message.success("Väljakutse kustutamine õnnestus") 
         dispatch(removeChallenge({ id: _id }))
-        //fetchChallenges();
       })
       .catch(e => message.error("Viga väljakutse kustutamisel"))
   }

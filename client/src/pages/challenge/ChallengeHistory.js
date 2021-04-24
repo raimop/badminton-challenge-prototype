@@ -6,13 +6,15 @@ import moment from 'moment-timezone';
 import * as services from "../../actions/services";
 
 const ChallengeHistory = props => { 
-  const history = useHistory();
-  const user = useSelector(state => state.auth.user);
   const { id } = props.match.params;
-  const [data, setData] = useState([])
-  const [historyUser, setHistoryUser] = useState(null)
-  const [ranking, setRanking] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const user = useSelector(state => state.auth.user);
+  const history = useHistory();
+  const [state, setState] = useState({
+    data: [],
+    userHistory: null,
+    ranking: null,
+    loading: false,
+  })
 
   const helpers = {
     format: data => {
@@ -29,7 +31,7 @@ const ChallengeHistory = props => {
   const columns = [
     {
       title: 'Vastane',
-      render: row => historyUser && (historyUser._id === row.challenger.user._id) ? `${row.challenged.user.firstName} ${row.challenged.user.lastName}` : `${row.challenger.user.firstName} ${row.challenger.user.lastName}`
+      render: row => state.userHistory && (state.userHistory._id === row.challenger.user._id) ? `${row.challenged.user.firstName} ${row.challenged.user.lastName}` : `${row.challenger.user.firstName} ${row.challenger.user.lastName}`
     },
     {
       title: 'Aeg',
@@ -45,7 +47,7 @@ const ChallengeHistory = props => {
       dataIndex:  "result",
       render: (field, row) => {
         if (!row.challenger.resultAccepted || !row.challenged.resultAccepted) return "Kinnitamata"
-        if (historyUser && row.winner._id !== historyUser._id){
+        if (state.userHistory && row.winner._id !== state.userHistory._id){
           let arr = []
           for (let i = 0; i < field.length; i++){
             arr.push([field[i][1], field[i][0]])
@@ -62,26 +64,28 @@ const ChallengeHistory = props => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchRankingsHistory = id => {
-    setLoading(true)
+    setState({
+      ...state,
+      loading: true
+    })
+
     services.fetchChallengeHistory(id)
       .then(res => {
-        setHistoryUser(res.user)
-        setData(res.data)
-        setRanking(res.ranking)
-        setLoading(false)
+        setState({
+          data: res.data,
+          userHistory: res.user,
+          ranking: res.ranking,
+          loading: false
+        })
       })
       .catch(e => message.error("Viga väljakutsete ajaloo pärimisel"))
   }
 
-  if (historyUser !== null && !historyUser.preferences.showHistory){
-    return <h1 className="text-center">Kasutaja <strong>{historyUser.firstName} {historyUser.lastName}</strong> on valinud peita enda väljakutsete ajalugu</h1>
-  }
-
   return ( 
     <div className="container">
-      { historyUser && <h1>Kasutaja <strong>{historyUser.firstName} {historyUser.lastName}</strong> väljakutsete ajalugu</h1> }
-      { ranking && user._id !== historyUser._id && user.gender === historyUser.gender && <div className="text-left"><button className="custom-button" onClick={() => history.push(`/challenges/create/${ranking._id}`)}>Esita talle väljakutse</button></div>}
-      <Table loading={loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === historyUser._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Väljakutsed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={data}/>
+      { state.ranking && state.userHistory && user._id !== state.userHistory._id && user.gender === state.userHistory.gender && <div className="text-left"><button className="custom-button" onClick={() => history.push(`/challenges/create/${state.ranking._id}`)}>Esita väljakutse</button></div>}
+      { state.userHistory && <h1>Kasutaja <strong>{state.userHistory.firstName} {state.userHistory.lastName}</strong> {!state.userHistory.preferences.showHistory ? "on valinud peita enda väljakutsete ajalugu" : "väljakutsete ajalugu" }</h1>}
+      <Table loading={state.loading} rowClassName={(rec) => rec.winner !== null && (rec.challenger.resultAccepted && rec.challenged.resultAccepted) ? rec.winner._id === state.userHistory._id ? "won-match" : "lost-match" : null } locale={{ emptyText: "Väljakutsed puuduvad" }} pagination={false} columns={columns} rowKey='_id' dataSource={state.data}/>
     </div>
   ); 
 }; 

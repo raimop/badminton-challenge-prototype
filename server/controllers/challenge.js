@@ -37,8 +37,6 @@ exports.create = async (req, res) => {
       },
     })
 
-    console.log(challenge)
-
     createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)}`, challenge)
 
     let posi = doc.findIndex(e => e.user._id.toString() === id)

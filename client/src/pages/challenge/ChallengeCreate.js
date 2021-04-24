@@ -38,8 +38,8 @@ const ChallengeCreate = props => {
   }
 
   return ( 
-    <main>
-      <h1 className="text-center">Esita väljakutse vastasele <strong>{ ranking && `${ranking.user.firstName} ${ranking.user.lastName}` }</strong></h1>
+    <main className="container">
+      <h1>Esita väljakutse vastasele <strong>{ ranking && `${ranking.user.firstName} ${ranking.user.lastName}` }</strong></h1>
       {
         ranking ?
           <Row type="flex" justify="flex-start" align="center">
@@ -70,7 +70,7 @@ const ChallengeCreate = props => {
                 rules={[
                   { required: true, message: 'Palun sisesta asukoht', }]}
               >
-                <Select placeholder="Vali saal">
+                <Select placeholder="Vali saal" style={{ textAlign: "left" }}>
                   <Option value="Lasnamäe Sulgpallihall">Lasnamäe Sulgpallihall</Option>
                   <Option value="Tondiraba Tennisekeskus">Tondiraba Tennisekeskus</Option>
                   <Option value="Tallink Tennisekeskus">Tallink Tennisekeskus</Option>

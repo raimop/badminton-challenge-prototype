@@ -1,7 +1,7 @@
 const Ranking = require('../models/Ranking');
 const Notification = require('../models/Notification');
 
-exports.filter = ["-email", "-password", "-createdAt", "-__v"]
+exports.filter = ["-email", "-password", "-createdAt", "-__v", "-status", "-confirmationCode"]
 
 exports.updatePoints = async ({ winner, loser }) => {
   await Promise.all([
