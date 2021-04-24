@@ -1,7 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as services from "../actions/services";
+
+export const updateChallenges = createAsyncThunk(
+  'challenges/fetch',
+  async () => {
+    const res = await services.fetchChallenges()
+    return {
+      unconfirmed: res.filter(e => !(e.challenger.resultAccepted && e.challenged.resultAccepted)),
+      rest: res.filter(e => (e.challenger.resultAccepted && e.challenged.resultAccepted))
+    }
+  }
+)
 
 export const challengeSlice = createSlice({
-  name: 'data',
+  name: 'challenges',
   initialState: {
     data: { unconfirmed: [], rest: [] },
     isLoading: false,
@@ -21,6 +33,18 @@ export const challengeSlice = createSlice({
       state.error = payload;
     },
   },
+  extraReducers: {
+    [updateChallenges.pending]: (state, action) => {
+      state.isLoading = true
+    },
+    [updateChallenges.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.data = action.payload
+    },
+    [updateChallenges.rejected]: (state, action) => {
+      state.error = action.error
+    }
+  }
 });
 
 export const { getChallengePending, getChallengeSuccess, getChallengeFail } = challengeSlice.actions;

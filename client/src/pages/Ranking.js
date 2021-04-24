@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getRankingPending, getRankingSuccess, getRankingFail } from '../redux/rankingSlice';
+import { getRankingPending, getRankingSuccess, getRankingFail, updateRankings } from '../redux/rankingSlice';
 import { Tabs, Popconfirm, message } from 'antd';
 import { QuestionOutlined, CheckCircleFilled } from '@ant-design/icons';
 import RankingTable from "../components/RankingTable"
@@ -17,23 +17,13 @@ const Ranking = () => {
   const types = [{ type: "Meesüksikmängud", short: "ms" }, {  type: "Naisüksikmängud", short: "ws" }]
 
   useEffect(() => {
-    fetchTableData();
+    dispatch(updateRankings())
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchTableData = () => {
-    dispatch(getRankingPending())
-    services.fetchRankings()
-      .then(res => dispatch(getRankingSuccess(res)))
-      .catch(e => { 
-        dispatch(getRankingFail("Viga edetabeli pärimisel")) 
-        message.error("Viga edetabeli pärimisel")
-      })
-  }
 
   const handleJoinLeave = decision => {
     services.entryRankings(decision)
       .then(res => {
-        fetchTableData();
+        dispatch(updateRankings())
         message.success(`Oled ${decision.toLowerCase().concat("nud")} edetabeli${decision === "Liitu" ? "ga" : "st"}`)
       })
       .catch(e => message.error(`Viga edetabelist ${decision.toLowerCase()}misega`))

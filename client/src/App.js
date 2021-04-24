@@ -1,4 +1,10 @@
-import { BrowserRouter, Route, Switch } from "react-router-dom";  
+import React, { useEffect } from 'react'
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { fetchNotifications } from './redux/notificationSlice';
+import { updateChallenges } from './redux/challengeSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, notification } from 'antd';
+import io from "socket.io-client";
 import PrivateRoute from "./hoc/PrivateRoute"
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -16,7 +22,45 @@ import Profile from "./pages/Profile";
 import 'antd/dist/antd.css';
 import './App.css';
 
+const socket = io();
+
 function App() {
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
+
+  const openNotification = data => {
+    const key = `open${Date.now()}`;
+    const btn = (<Button type="primary" size="small" onClick={() => notification.close(key)}> Sulge </Button>);
+    notification.open({
+      message: 'Uus teade',
+      description: data,
+      placement: 'bottomRight',
+      btn,
+      key
+    });
+  };
+
+  useEffect(() => {
+    if (user){
+      dispatch(fetchNotifications())
+      dispatch(updateChallenges())
+    }
+  }, [user])
+
+  useEffect(() => {
+    const handleNotification = data => {
+      dispatch(fetchNotifications())
+      dispatch(updateChallenges())
+      openNotification(data);
+    }
+
+    if (user) socket.on(user._id, handleNotification);
+
+    return () => {
+      if (user) socket.off(user._id, handleNotification);
+    }
+  }, [user])
+
   return (
     <BrowserRouter>
       <Route path={"/"} component={Header}/>

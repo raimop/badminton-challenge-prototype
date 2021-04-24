@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getChallengePending, getChallengeSuccess } from '../../redux/challengeSlice';
 import { Table, Tooltip, Divider, message } from 'antd';
 import { useHistory } from "react-router-dom";
 import { CheckCircleTwoTone, ClockCircleTwoTone, EditTwoTone, DeleteTwoTone, StopTwoTone, IssuesCloseOutlined } from "@ant-design/icons"
@@ -13,7 +12,6 @@ const Challenges = () => {
   const { isLoading } = challenges;
   const data = challenges.data || { unconfirmed: [], rest: [] }
   const history = useHistory();
-  const dispatch = useDispatch();
 
   const helpers = {
     score: match => {
@@ -95,25 +93,9 @@ const Challenges = () => {
     services.deleteChallenge(_id)
       .then(res => { 
         message.success("Väljakutse kustutamine õnnestus") 
-        fetchChallenges();
+        //fetchChallenges();
       })
       .catch(e => message.error("Viga väljakutse kustutamisel"))
-  }
-
-  useEffect(() => {
-    fetchChallenges();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchChallenges = () => {
-    dispatch(getChallengePending())
-    services.fetchChallenges()
-      .then(res => {
-        dispatch(getChallengeSuccess({
-          unconfirmed: res.filter(e => !(e.challenger.resultAccepted && e.challenged.resultAccepted)),
-          rest: res.filter(e => (e.challenger.resultAccepted && e.challenged.resultAccepted))
-        }))
-      })
-      .catch(e => message.error("Viga väljakutsete pärimisel"))
   }
 
   return (

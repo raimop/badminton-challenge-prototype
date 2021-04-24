@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"; 
 import { Table, message, Popconfirm, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { getNotificationPending, getNotificationSuccess, getNotificationFail } from '../redux/notificationSlice';
+import { fetchNotifications } from '../redux/notificationSlice';
 import { CheckCircleTwoTone, StopTwoTone, DeleteTwoTone, QuestionOutlined, DeleteOutlined } from "@ant-design/icons"
 import * as services from "../actions/services";
 import moment from 'moment-timezone';
@@ -69,7 +69,7 @@ const Notifications = ({ title }) => {
     services.acceptChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse aktsepteerimine õnnestus")
-        fetchNotifications();
+        dispatch(fetchNotifications());
         if (!row.read) toggleNotificationRead(row)
       })
       .catch(e => message.error("Viga väljakutse aktsepteerimisel"))
@@ -79,7 +79,7 @@ const Notifications = ({ title }) => {
     services.deleteChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse loobumine õnnestus")
-        fetchNotifications();
+        dispatch(fetchNotifications());
         if (!row.read) toggleNotificationRead(row)
       })
       .catch(e => message.error("Viga väljakutsest loobumisel"))
@@ -89,7 +89,7 @@ const Notifications = ({ title }) => {
     services.deleteNotification(row._id)
       .then(res => {
         message.success(`Teade edukalt kustutatud`)
-        fetchNotifications();
+        dispatch(fetchNotifications());
       })
       .catch(e => message.error("Viga teate kustutamisel"))
   }
@@ -98,30 +98,20 @@ const Notifications = ({ title }) => {
     services.deleteAllNotification()
       .then(res => {
         message.success(`Kõik teated Edukalt kustutatud`)
-        fetchNotifications();
+        dispatch(fetchNotifications());
       })
       .catch(e => message.error("Viga kõikide teadete kustutamisel"))
   }
 
   const toggleNotificationRead = row => {
     services.updateNotification(row._id)
-      .then(res => fetchNotifications())
+      .then(res => dispatch(fetchNotifications()))
       .catch(e => message.error("Viga loetuks/mitteloetuks märkimisel"))
   }
 
   useEffect(() => {
-    fetchNotifications();
+    dispatch(fetchNotifications());
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchNotifications = () => {
-    dispatch(getNotificationPending())
-    services.fetchNotifications()
-      .then(res => dispatch(getNotificationSuccess(res)))
-      .catch(e => {
-        dispatch(getNotificationFail("Viga teadete pärimisel"))
-        message.error("Viga teadete pärimisel")
-      })
-  }
 
   return ( 
     <>

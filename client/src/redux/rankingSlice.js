@@ -1,7 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as services from "../actions/services";
+
+export const updateRankings = createAsyncThunk(
+  'ranking/fetch',
+  async () => {
+    const res = await services.fetchRankings()
+    return res
+  }
+)
 
 export const rankingSlice = createSlice({
-  name: 'data',
+  name: 'ranking',
   initialState: {
     data: { ms: [], ws: [] },
     isLoading: false,
@@ -21,6 +30,18 @@ export const rankingSlice = createSlice({
       state.error = payload;
     },
   },
+  extraReducers: {
+    [updateRankings.pending]: (state, action) => {
+      state.isLoading = true
+    },
+    [updateRankings.fulfilled]: (state, action) => {
+      state.isLoading = false
+      state.data = action.payload
+    },
+    [updateRankings.rejected]: (state, action) => {
+      state.error = action.error
+    }
+  }
 });
 
 export const { getRankingPending, getRankingSuccess, getRankingFail } = rankingSlice.actions;

@@ -1,4 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as services from "../actions/services";
+
+export const fetchNotifications = createAsyncThunk(
+  'notifications/fetch',
+  async () => {
+    const res = await services.fetchNotifications()
+    return res
+  }
+)
 
 export const notificationSlice = createSlice({
   name: 'notifications',

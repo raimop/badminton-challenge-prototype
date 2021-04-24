@@ -30,7 +30,7 @@ module.exports.sendNewChallengeEmail = (email, challenged, challenger) => {
   gmailSender.sendMail({
     from: sendWithName,
     to: email,
-    subject: "Sulgpall.eu: Teile on esitatud väljakutse",
+    subject: "Teile on esitatud väljakutse",
     html: `<h2>Tere, ${challenged}</h2>
         <p>${challenger} esitas teile väljakutse. <a href=https://sulgpall.eu/notifications>Vajutage siia</a>, et nõustuda või loobuda väljakutsest</p>`,
   }).catch(err => console.log(err));

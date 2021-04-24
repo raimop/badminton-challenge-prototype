@@ -99,7 +99,7 @@ exports.deleteChallenge = async (req, res) => {
 
     let sendTo, content;
     if (!challenge.active){
-      sendTo = challenge.challenger.user
+      sendTo = challenge.challenged.user
       content = `${user.firstName} ${user.lastName} loobus Sinu esitatud väljakutsest.`
     } else {
       sendTo = challenge.challenged.user.toString() === user._id ? challenge.challenger.user : challenge.challenged.user
@@ -172,6 +172,16 @@ exports.update = async (req, res) => {
       updatePoints(finalResult)
       createNotification(challenge.challenger.user, message)
       createNotification(challenge.challenged.user, message)
+    } else {
+      let to;
+      if (challenge.challenger.user._id.toString() === user._id) {
+        to = challenge.challenged.user;
+        message = `${challenge.challenger.user.firstName} ${challenge.challenger.user.lastName} uuendas väljakutse tulemust`
+      } else {
+        to = challenge.challenger.user;
+        message = `${challenge.challenged.user.firstName} ${challenge.challenged.user.lastName} uuendas väljakutse tulemust`
+      }
+      createNotification(to, message)
     }
 
     const doc = await challenge.save()
