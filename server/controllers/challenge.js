@@ -41,6 +41,8 @@ exports.create = async (req, res) => {
 
     let posi = doc.findIndex(e => e.user._id.toString() === id)
 
+    createNotification(user._id, `Esitasid väljakutse kasutajale ${doc[posi].user.firstName} ${doc[posi].user.lastName}, nüüd on vaja oodata tema otsust.`)
+    
     if (doc[posi].user.preferences.emailNotif){
       nodemailer.sendNewChallengeEmail(doc[posi].user.email, doc[posi].user.firstName, user.firstName);
     }

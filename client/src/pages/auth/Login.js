@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, useHistory } from "react-router-dom";  
-import { Form, Input, Button, Row, message } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { getUserPending, getUserFail, loginAndSave } from '../../redux/authSlice';
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { Form, Input, Button, Row, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  getUserPending,
+  getUserFail,
+  loginAndSave,
+} from "../../redux/authSlice";
 import * as services from "../../actions/services.js";
 
 const layout = {
@@ -13,28 +17,29 @@ const layout = {
 const Login = () => {
   const dispatch = useDispatch();
   let history = useHistory();
-  const user = useSelector(state => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    if (user){
-      message.error("Oled juba sisse loginud.")
+    if (user) {
+      message.error("Oled juba sisse loginud.");
       history.push("/");
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
-  const onFinish = values => {
-    dispatch(getUserPending())
-    services.login(values)
-    .then(res => {
-      dispatch(loginAndSave(res));
-      message.success("Sisse logimine õnnestus!")
-      history.push("/");
-    })
-    .catch(e => {
-      dispatch(getUserFail("Viga sisselogimisel"));
-      if (e instanceof Error) return message.error("Viga serveriga") 
-      message.error(e)
-    });
+  const onFinish = (values) => {
+    dispatch(getUserPending());
+    services
+      .login(values)
+      .then((res) => {
+        dispatch(loginAndSave(res));
+        message.success("Sisse logimine õnnestus!");
+        history.push("/");
+      })
+      .catch((e) => {
+        dispatch(getUserFail("Viga sisselogimisel"));
+        if (e instanceof Error) return message.error("Viga serveriga");
+        message.error(e);
+      });
   };
 
   return (
@@ -53,21 +58,21 @@ const Login = () => {
         <Form.Item
           name="email"
           rules={[
-            { required: true, message: 'Palun sisesta e-mail' },
-            { type: 'email', message: 'Peab olema korrektne e-mail' }
+            { required: true, message: "Palun sisesta e-mail" },
+            { type: "email", message: "Peab olema korrektne e-mail" },
           ]}
         >
-          <Input prefix={<UserOutlined/>} placeholder="E-mail" />
+          <Input prefix={<UserOutlined />} placeholder="E-mail" />
         </Form.Item>
         <Form.Item
           name="password"
           rules={[
-            { required: true, message: 'Palun sisesta parool!' },
-            { min: 6, message: 'Vähemalt 6 tähemärki pikk' }
+            { required: true, message: "Palun sisesta parool!" },
+            { min: 6, message: "Vähemalt 6 tähemärki pikk" },
           ]}
         >
           <Input.Password
-            prefix={<LockOutlined/>}
+            prefix={<LockOutlined />}
             type="password"
             placeholder="Parool"
           />

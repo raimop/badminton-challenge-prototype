@@ -1,29 +1,29 @@
-import React from "react"; 
-import { useSelector, useDispatch } from 'react-redux';
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Form, Row, Button, message, Switch } from "antd";
-import { updateUser } from '../redux/authSlice';
+import { updateUser } from "../redux/authSlice";
 import * as services from "../actions/services";
 
 const layout = { wrapperCol: { span: 26 } };
 
-const Profile = () => { 
-  const user = useSelector(state => state.auth.user);
+const Profile = () => {
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
-  const onFinish = data => {
-    services.updateUser(data).then(
-      res => {
-        dispatch(updateUser(res))
-        message.success("Profiili uuendamine õnnestus")
-      }
-    )
-    .catch (e => message.error(e))
-  }
+  const onFinish = (data) => {
+    services
+      .updateUser(data)
+      .then((res) => {
+        dispatch(updateUser(res));
+        message.success("Profiili uuendamine õnnestus");
+      })
+      .catch((e) => message.error(e));
+  };
 
-  return ( 
+  return (
     <main className="container">
       <h1>Profiil</h1>
-      <h2>Tere, {`${user.firstName} ${user.lastName}`}</h2> 
+      <h2>Tere, {`${user.firstName} ${user.lastName}`}</h2>
       <Row type="flex" justify="flex-start" align="center">
         <Form
           {...layout}
@@ -61,9 +61,9 @@ const Profile = () => {
             </Button>
           </Form.Item>
         </Form>
-        </Row>
-    </main> 
-  ); 
-}; 
+      </Row>
+    </main>
+  );
+};
 
-export default Profile; 
+export default Profile;
