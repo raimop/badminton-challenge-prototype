@@ -60,7 +60,8 @@ const SignUp = () => {
             name="firstName"
             rules={[
               { required: true, message: "Palun sisesta enda eesnimi!" },
-              { min: 2, message: "Vähemalt 2 tähte pikk" },
+              { min: 3, message: "Vähemalt 3 tähte pikk" },
+              { pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"), message: "Peab olema suure algustähega ja ainult tähestikulised tähed on lubatud" }
             ]}
           >
             <Input prefix={<UserOutlined />} placeholder="Eesnimi" />
@@ -69,7 +70,8 @@ const SignUp = () => {
             name="lastName"
             rules={[
               { required: true, message: "Palun sisesta enda perekonnanimi!" },
-              { min: 2, message: "Vähemalt 2 tähte pikk" },
+              { min: 3, message: "Vähemalt 3 tähte pikk" },
+              { pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"), message: "Peab olema suure algustähega ja ainult tähestikulised tähed on lubatud" }
             ]}
           >
             <Input prefix={<UserOutlined />} placeholder="Perekonnanimi" />

@@ -1,6 +1,7 @@
 const Challenge = require('../models/Challenge');
 const Ranking = require('../models/Ranking');
 const User = require('../models/User');
+const mongoose = require('mongoose');
 const { status } = require('../helpers/status');
 const { filter, createNotification, updatePoints } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
@@ -123,6 +124,8 @@ exports.update = async (req, res) => {
     const { user } = req;
     const { score, winner } = req.body;
     const { id } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(winner)) throw Error("Võitja ID ei ole korrektne");
     
     const challenge = await Challenge.findOne({ _id: id })
       .populate({ path:"challenger.user challenged.user", select:filter })

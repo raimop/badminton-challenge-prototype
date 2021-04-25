@@ -1,35 +1,56 @@
 const router = require("express").Router();
 const authController = require("../controllers/auth");
-const { check, validationResult } = require("express-validator");
-const { MESSAGES } = require('../helpers/messages');
-const { status } = require('../helpers/status');
+const { check } = require("express-validator");
+const validationMiddleware = require("../middleware/validationMiddleware");
 
-const validationMiddleware = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(status.unprocessable).json({ msg: MESSAGES.USER.INVALID_FIELD_VALUES });
-  next();
-};
+router.get(
+  "/confirm/:confirmationCode",
+  check("confirmationCode").exists().trim().escape(),
+  validationMiddleware,
+  authController.verifyUser
+);
 
-router.get("/confirm/:confirmationCode", authController.verifyUser)
-
-router.post('/login', 
+router.post(
+  "/login",
   [
-    check("email").isEmail().normalizeEmail().withMessage("Peab olema korrektne e-mail"),
-    check("password").isLength({ min: 6 }).withMessage("Peab olema vähemalt 6 tähemärki")  
+    check("email")
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Peab olema korrektne e-mail"),
+    check("password")
+      .isLength({ min: 6 })
+      .withMessage("Peab olema vähemalt 6 tähemärki"),
   ],
   validationMiddleware,
-  authController.login);
+  authController.login
+);
 
-router.post('/signup',
+router.post(
+  "/signup",
   [
-    check("firstName").isLength({ min: 2 }).withMessage("Peab olema vähemalt 2 tähemärki").exists(),
-    check("lastName").isLength({ min: 2 }).withMessage("Peab olema vähemalt 2 tähemärki").exists(),
-    check("email").isEmail().normalizeEmail().withMessage("Peab olema korrektne e-mail"),
-    check("gender").exists().isIn(['m', 'f']).withMessage("Peab olema m või f"),
-    check("password").isLength({ min: 6 }).withMessage("Peab olema vähemalt 6 tähemärki")
+    check("firstName")
+      .isLength({ min: 3 })
+      .withMessage("Peab olema vähemalt 2 tähemärki")
+      .trim()
+      .exists()
+      .matches(/^[A-ZÕÄÖÜ][a-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
+    check("lastName")
+      .isLength({ min: 3 })
+      .withMessage("Peab olema vähemalt 2 tähemärki")
+      .trim()
+      .exists()
+      .matches(/^[A-ZÕÄÖÜ][a-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
+    check("email")
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Peab olema korrektne e-mail"),
+    check("gender").exists().isIn(["m", "f"]).withMessage("Peab olema m või f"),
+    check("password")
+      .isLength({ min: 6 })
+      .withMessage("Peab olema vähemalt 6 tähemärki"),
   ],
-  validationMiddleware, 
+  validationMiddleware,
   authController.signup
-  );
+);
 
 module.exports = router;
