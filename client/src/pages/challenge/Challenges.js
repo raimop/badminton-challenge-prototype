@@ -65,7 +65,7 @@ const Challenges = () => {
       responsive: ['md'],
     },
     {
-      title: 'Tegevus',
+      title: 'Tulemus',
       width: "5%",
       align: 'center',
       render: (row) => {

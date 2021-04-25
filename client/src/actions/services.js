@@ -190,6 +190,16 @@ export const deleteAllNotification = () => {
 		.then(handleResponse);
 };
 
+export const markAllNotificationsRead = () => {
+	return fetch(`${base}/notification/readAll`, {
+			method: "PUT",
+			headers: getHeader({
+				token: true
+			})
+		})
+		.then(handleResponse);
+};
+
 /* User */
 
 export const updateUser = data => {

@@ -2,3 +2,11 @@
   display: inline-block;
   cursor: pointer;
 }
+
+.btn-green {
+  background-color: #5cb66f !important;
+}
+
+.btn-shadow {
+  box-shadow: 1px 1px 1px 1px black;
+}

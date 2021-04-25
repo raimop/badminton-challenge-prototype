@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"; 
 import { Table, message, Popconfirm, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNotifications, toggleNotification, removeAllNotifications, removeNotification, removeChallengeFromNotification } from '../redux/notificationSlice';
-import { CheckCircleTwoTone, StopTwoTone, DeleteTwoTone, QuestionOutlined, DeleteOutlined } from "@ant-design/icons"
+import { fetchNotifications, toggleNotification, removeAllNotifications, removeNotification, removeChallengeFromNotification, markAllNotificationsRead } from '../redux/notificationSlice';
+import { CheckCircleTwoTone, StopTwoTone, DeleteTwoTone, QuestionOutlined, DeleteOutlined, CheckCircleFilled } from "@ant-design/icons"
 import * as services from "../actions/services";
 import moment from 'moment-timezone';
 import "./Notifications.css"
@@ -17,7 +17,7 @@ const Notifications = ({ title }) => {
     setData(notifications.data)
   }, [notifications])
 
-  const clickableToggleRead = row => <span style={{ cursor: "pointer" }} onClick={() => toggleNotificationRead(row)}>{row.content}</span>
+  const clickableToggleRead = row => <span style={{ cursor: "pointer" }} onClick={() => handleNotificationReadToggle(row)}>{row.content}</span>
 
   const columns = [
     {
@@ -29,7 +29,7 @@ const Notifications = ({ title }) => {
           <br/>
           <Popconfirm
             title={`Oled kindel, et tahad väljakutset aktsepteerida?`}
-            onConfirm={() => acceptChallenge(row)}
+            onConfirm={() => handleChallengeAccept(row)}
             onCancel={() => message.success("Väljakutse aktsepteerimine peatatud")}
             okText="Jah"
             cancelText="Ei"
@@ -39,7 +39,7 @@ const Notifications = ({ title }) => {
 
           <Popconfirm
             title={`Oled kindel, et tahad väljakutsest loobuda?`}
-            onConfirm={() => deleteChallenge(row)}
+            onConfirm={() => handleChallengeDelete(row)}
             onCancel={() => message.success("Väljakutsest loobumine peatatud")}
             okText="Jah"
             cancelText="Ei"
@@ -60,36 +60,36 @@ const Notifications = ({ title }) => {
     {
       title: 'Märgi',
       responsive: ['md'],
-      render: row => <button onClick={() => toggleNotificationRead(row)}> { !row.read ? "Loetuks" : "Mitte\u00ADloetuks" } </button>
+      render: row => <button onClick={() => handleNotificationReadToggle(row)}> { !row.read ? "Loetuks" : "Mitte\u00ADloetuks" } </button>
     },
     {
       title: 'Kustuta',
       align: 'center',
-      render: row => <button onClick={() => deleteNotification(row)}><DeleteTwoTone /></button>
+      render: row => <button onClick={() => handleNotificationDelete(row)}><DeleteTwoTone /></button>
     },
   ];
 
-  const acceptChallenge = row => {
+  const handleChallengeAccept = row => {
     services.acceptChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse aktsepteerimine õnnestus")
         dispatch(removeChallengeFromNotification({ id: row._id }));
-        if (!row.read) toggleNotificationRead(row)
+        if (!row.read) handleNotificationReadToggle(row)
       })
       .catch(e => message.error("Viga väljakutse aktsepteerimisel"))
   }
 
-  const deleteChallenge = (row) => {
+  const handleChallengeDelete = (row) => {
     services.deleteChallenge(row.challenge._id)
       .then(res => {
         message.success("Väljakutse loobumine õnnestus")
         dispatch(removeChallengeFromNotification({ id: row._id }));
-        if (!row.read) toggleNotificationRead(row)
+        if (!row.read) handleNotificationReadToggle(row)
       })
       .catch(e => message.error("Viga väljakutsest loobumisel"))
   }
 
-  const deleteNotification = row => {
+  const handleNotificationDelete = row => {
     services.deleteNotification(row._id)
       .then(res => {
         message.success(`Teade edukalt kustutatud`)
@@ -97,8 +97,16 @@ const Notifications = ({ title }) => {
       })
       .catch(e => message.error("Viga teate kustutamisel"))
   }
+  const handleNotificationsMarkAllAsRead = () => {
+    services.markAllNotificationsRead()
+      .then(res => {
+        message.success(`Kõik teated on märgitud loetuks`)
+        dispatch(markAllNotificationsRead())
+      })
+      .catch(e => message.error("Viga teate kustutamisel"))
+  }
 
-  const deleteAllNotification = () => {
+  const handleNotificationDeleteAll = () => {
     services.deleteAllNotification()
       .then(res => {
         message.success(`Kõik teated edukalt kustutatud`)
@@ -107,7 +115,7 @@ const Notifications = ({ title }) => {
       .catch(e => message.error("Viga kõikide teadete kustutamisel"))
   }
 
-  const toggleNotificationRead = row => {
+  const handleNotificationReadToggle = row => {
     services.updateNotification(row._id)
       .then(res => {
         dispatch(toggleNotification({ id: row._id }))
@@ -128,13 +136,14 @@ const Notifications = ({ title }) => {
             <Popconfirm
               icon={<QuestionOutlined style={{ color: 'red' }} />}
               title={`Oled kindel, et tahad kõik teated kustutada?`}
-              onConfirm={() => deleteAllNotification()}
+              onConfirm={() => handleNotificationDeleteAll()}
               onCancel={() => message.success('Tegevus peatatud')}
               okText="Jah"
               cancelText="Ei"
             >
               <button className="custom-button"><DeleteOutlined /> Kustuta kõik teated</button>
             </Popconfirm>
+            <button className="custom-button" style={{ marginLeft: "5px" }} onClick={handleNotificationsMarkAllAsRead}><CheckCircleFilled/> Märgi kõik loetuks</button>
           </div>
         }
         <Table rowClassName={record => !record.read ? "unread" : null } pagination={false} loading={isLoading} locale={{ emptyText: "Teated puuduvad" }} columns={columns} rowKey='_id' dataSource={data}/>

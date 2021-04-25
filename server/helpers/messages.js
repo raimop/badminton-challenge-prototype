@@ -43,6 +43,7 @@ exports.MESSAGES = {
     CONFIRMED_SUCCESSFULLY: "Kasutaja kinnitatud edukalt, saate nüüd sisse logida"
   },
   NOTIFICATION: {
-    DOES_NOT_EXIST: "Sellist teadet ei leitud"
+    DOES_NOT_EXIST: "Sellist teadet ei leitud",
+    DO_NOT_EXIST: "Teateid ei leitud"
   }
 }

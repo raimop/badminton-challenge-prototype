@@ -14,6 +14,8 @@ const sendWithName = {
   address: process.env.EMAIL_USER
 }
 
+const url = "https://sulgpall.eu";
+
 module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
   gmailSender.sendMail({
     from: sendWithName,
@@ -21,7 +23,7 @@ module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
     subject: "Palun kinnitage enda e-posti aadress",
     html: `<h2>Tere, ${name}</h2>
         <p>Aitäh, et registreerusite https://sulgpall.eu kasutajaks</p>
-        <p><a href=https://sulgpall.eu/confirm/${confirmationCode}> Vajutage siia</a>, et kinnitada enda registreerumine</p>
+        <p><a href=${url}/confirm/${confirmationCode}> Vajutage siia</a>, et kinnitada enda registreerumine</p>
         <p>Kui teie ei registreerunud selle e-postiga, siis ignoreerige seda kirja.</p>`,
   }).catch(err => console.log(err));
 };
@@ -32,6 +34,6 @@ module.exports.sendNewChallengeEmail = (email, challenged, challenger) => {
     to: email,
     subject: "Teile on esitatud väljakutse",
     html: `<h2>Tere, ${challenged}</h2>
-        <p>${challenger} esitas teile väljakutse. <a href=https://sulgpall.eu/notifications>Vajutage siia</a>, et nõustuda või loobuda väljakutsest</p>`,
+        <p>${challenger} esitas teile väljakutse. <a href=${url}/notifications>Vajutage siia</a>, et nõustuda või loobuda väljakutsest</p>`,
   }).catch(err => console.log(err));
 };

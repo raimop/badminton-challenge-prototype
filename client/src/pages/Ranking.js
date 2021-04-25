@@ -9,9 +9,10 @@ import * as services from "../actions/services.js";
 const { TabPane } = Tabs;
 
 const Ranking = () => {
-  const [defaultActiveKey, setDefaultActiveKey] = useState("ms")
-  const dispatch = useDispatch();
   const ranking = useSelector(state => state.ranking);
+  const user = useSelector(state => state.auth.user);
+  const [defaultActiveKey, setDefaultActiveKey] = useState(user && user.gender === "m" ? "ms" : "ws")
+  const dispatch = useDispatch();
   const { isLoading } = ranking;
   const data = ranking.data || { ms: [], ws: [] };
   const types = [{ type: "Meesüksikmängud", short: "ms" }, {  type: "Naisüksikmängud", short: "ws" }]
@@ -55,7 +56,7 @@ const Ranking = () => {
         <Tabs defaultActiveKey={defaultActiveKey} onChange={key => setDefaultActiveKey(key)}>
           {
             types.map((e, i) => (
-              <TabPane tab={e.type} key={i}> 
+              <TabPane tab={e.type} key={types[i].short}> 
                 <RankingTable loading={isLoading} type={e.short} data={data[e.short]} displayJoinLeaveButton={displayJoinLeaveButton}/>
               </TabPane>
               ))

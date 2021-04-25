@@ -10,8 +10,6 @@ const Profile = () => {
   const user = useSelector(state => state.auth.user);
   const dispatch = useDispatch();
 
-  console.log(user.preferences.emailNotif)
-
   const onFinish = data => {
     services.updateUser(data).then(
       res => {
@@ -59,7 +57,7 @@ const Profile = () => {
           </Form.Item>
           <Form.Item {...layout}>
             <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
-              Muuda
+              Kinnita
             </Button>
           </Form.Item>
         </Form>

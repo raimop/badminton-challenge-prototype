@@ -37,7 +37,7 @@ exports.create = async (req, res) => {
       },
     })
 
-    createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)}`, challenge)
+    createNotification(id, `Sinule on ${user.firstName} ${user.lastName} esitanud väljakutse ${moment(challenge.info.datetime).format(shortTimeFormat)} ${address} saalis`, challenge)
 
     let posi = doc.findIndex(e => e.user._id.toString() === id)
 
@@ -200,7 +200,7 @@ exports.getAll = async (req, res) => {
         { 'challenger.user': user._id },
         { 'challenged.user': user._id }]
       })
-      //.where("active").equals(true)
+      .where("active").equals(true)
       .populate({ path:"challenger.user challenged.user winner", select:filter })
 
     res.status(status.success).send(doc)

@@ -191,10 +191,10 @@ const ChallengeUpdate = props => {
         <Divider/>
         { state.user &&
           <>
-            { state.data && state.data[0].winner == null ? 
-                <p>Ole esimene, kes sisestab tulemust</p>
+            { state.data.length > 0 && state.data[0].winner == null ? 
+                <p>Ole esimene, kes sisestab tulemust.</p>
                 : 
-                !state.data[0][state.user].resultAccepted ? 
+                !state.data[0][state.user].resultAccepted && 
                   <Popconfirm
                     icon={<QuestionOutlined style={{ color: 'red' }} />}
                     title={`Oled kindel, et tahad tulemust aktsepteerida?`}
@@ -203,11 +203,9 @@ const ChallengeUpdate = props => {
                     okText="Jah"
                     cancelText="Ei"
                   >
-                  <button className="custom-button">Aktsepteeri tulemust ({state.data[0].winner.firstName + " " + state.data[0].winner.lastName} võitis seisuga {state.data[0].result.map(e => e.join("-")).join(" | ")})</button> 
+                    <h2>Vastase poolt esitatud tulemus</h2>
+                    <button className="custom-button btn-green btn-shadow">Aktsepteeri tulemust – {state.data[0].winner.firstName + " " + state.data[0].winner.lastName} võitis seisuga {state.data[0].result.map(e => e.join("-")).join(" | ")}</button> 
                   </Popconfirm>
-                  
-                  :   
-                  <p>Ootame vastase tulemust</p>
             }
             <Divider/>
             <Row type="flex" justify="flex-start" align="center">

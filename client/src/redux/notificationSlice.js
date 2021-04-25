@@ -17,11 +17,12 @@ export const notificationSlice = createSlice({
     error: ""
   },
   reducers: {
+    markAllNotificationsRead: state => {
+      state.data = state.data.map(e => { return { ...e, read: 1 }})
+    },
     removeChallengeFromNotification: (state, { payload }) => {
       const id = state.data.findIndex(e => e._id === payload.id);
-      console.log(state.data[id])
       state.data[id].challenge = null
-      console.log(state.data[id])
     },
     removeAllNotifications: state => {
       state.data = []
@@ -60,6 +61,6 @@ export const notificationSlice = createSlice({
   }
 });
 
-export const { getNotificationPending, getNotificationSuccess, getNotificationFail, removeNotification, removeAllNotifications, toggleNotification, removeChallengeFromNotification, addNotification } = notificationSlice.actions;
+export const { getNotificationPending, getNotificationSuccess, getNotificationFail, removeNotification, removeAllNotifications, toggleNotification, removeChallengeFromNotification, addNotification, markAllNotificationsRead } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

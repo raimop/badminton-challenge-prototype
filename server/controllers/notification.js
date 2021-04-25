@@ -64,3 +64,15 @@ exports.deleteAll = async (req, res) => {
     res.status(status.bad).json({ msg: e.message });
   }
 }
+
+exports.markAllAsRead = async (req, res) => {
+  try {
+    const { user } = req;
+    const markedAsRead = await Notification.updateMany({ to: user._id }, { read: 1 })
+    if (!markedAsRead.n) throw Error(MESSAGES.NOTIFICATION.DO_NOT_EXIST);
+
+    res.status(status.success).json({ msg: `${markedAsRead.nModified} teadet märgitud loetuks` });
+  } catch (e) {
+    res.status(status.bad).json({ msg: e.message });
+  }
+}
