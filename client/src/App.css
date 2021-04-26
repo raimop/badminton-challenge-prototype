@@ -16,12 +16,6 @@
   background: rgb(255, 227, 227);
 }
 
-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
 .text-left {
   text-align: left !important;
 }

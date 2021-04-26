@@ -1,7 +1,5 @@
 import React from "react";
-import { CustomButton } from "../components/CustomButton";
 import badmintonPhoto from "../welcome.jpg";
-import { CheckCircleFilled } from "@ant-design/icons";
 import "./Home.css";
 
 const Home = () => {

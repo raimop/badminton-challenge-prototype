@@ -1,12 +1,16 @@
-const base = "/api";
+import store from "../redux/store";
 
-export const getToken = () => localStorage.getItem("token");
+const base = "/api";
 
 export const getHeader = ({ token = false } = {}) => {
   const header = {
     "content-type": "application/json",
   };
-  if (token) header["Authorization"] = `Bearer ${getToken()}`;
+
+  if (token) {
+    const state = store.getState();
+    header["Authorization"] = `Bearer ${state.auth.token}`;
+  }
   return header;
 };
 
