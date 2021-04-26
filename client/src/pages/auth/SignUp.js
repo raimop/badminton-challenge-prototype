@@ -41,10 +41,12 @@ const SignUp = () => {
 
   return (
     <Row type="flex" justify="flex-start" align="center">
-      {registered ? (
+      { registered ? (
         <Alert
-          message="Registreerimine oli edukas, kinnita enda e-posti aadress"
+          message="Kinnita enda e-posti aadress"
+          description="Registreerimine oli edukas. Sulle saadetakse e-posti aadress juhisega, kuidas enda konto aktiviseerida."
           type="success"
+          showIcon
         />
       ) : (
         <Form
@@ -61,7 +63,11 @@ const SignUp = () => {
             rules={[
               { required: true, message: "Palun sisesta enda eesnimi!" },
               { min: 3, message: "Vähemalt 3 tähte pikk" },
-              { pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"), message: "Peab olema suure algustähega ja ainult tähestikulised tähed on lubatud" }
+              {
+                pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"),
+                message:
+                  "Peab olema suure algustähega, teised väikesed ja ainult tähestikulised tähed on lubatud",
+              },
             ]}
           >
             <Input prefix={<UserOutlined />} placeholder="Eesnimi" />
@@ -71,7 +77,11 @@ const SignUp = () => {
             rules={[
               { required: true, message: "Palun sisesta enda perekonnanimi!" },
               { min: 3, message: "Vähemalt 3 tähte pikk" },
-              { pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"), message: "Peab olema suure algustähega ja ainult tähestikulised tähed on lubatud" }
+              {
+                pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"),
+                message:
+                  "Peab olema suure algustähega, teised väikesed ja ainult tähestikulised tähed on lubatud",
+              },
             ]}
           >
             <Input prefix={<UserOutlined />} placeholder="Perekonnanimi" />

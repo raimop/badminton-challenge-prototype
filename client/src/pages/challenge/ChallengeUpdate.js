@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import * as services from "../../actions/services";
 import moment from "moment-timezone";
 import "./ChallengeUpdate.css";
+import { CustomButton } from "../../components/CustomButton";
 
 const { Option } = Select;
 
@@ -350,14 +351,14 @@ const ChallengeUpdate = (props) => {
                   cancelText="Ei"
                 >
                   <h2>Vastase poolt esitatud tulemus</h2>
-                  <button className="custom-button btn-green btn-shadow">
+                  <CustomButton green shadow>
                     Aktsepteeri tulemust –{" "}
                     {state.data[0].winner.firstName +
                       " " +
                       state.data[0].winner.lastName}{" "}
                     võitis seisuga{" "}
                     {state.data[0].result.map((e) => e.join("-")).join(" | ")}
-                  </button>
+                  </CustomButton>
                 </Popconfirm>
               )
             )}
@@ -408,4 +409,5 @@ const ChallengeUpdate = (props) => {
     </>
   );
 };
+
 export default ChallengeUpdate;

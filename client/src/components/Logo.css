@@ -1,0 +1,16 @@
+.header--logo--icon {
+  position: relative;
+  left: 10px;
+  width: 45px;
+  height: 45px;
+  background: white;
+  border-radius: 25px;
+  z-index: 4;
+}
+
+@media screen and (max-width: 576px) {
+  .header--logo--icon {
+    width: 45px;
+    height: 45px;
+  }
+}

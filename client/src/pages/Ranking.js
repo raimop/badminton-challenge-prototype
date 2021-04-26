@@ -5,6 +5,7 @@ import { Tabs, Popconfirm, message } from "antd";
 import { QuestionOutlined, CheckCircleFilled } from "@ant-design/icons";
 import RankingTable from "../components/RankingTable";
 import * as services from "../actions/services.js";
+import { CustomButton } from "../components/CustomButton";
 
 const { TabPane } = Tabs;
 
@@ -57,9 +58,9 @@ const Ranking = () => {
           okText="Jah"
           cancelText="Ei"
         >
-          <button className="custom-button">
-            <CheckCircleFilled /> {`${decision} edetabeli${ending} `}
-          </button>
+          <CustomButton icon={<CheckCircleFilled />}>
+            {`${decision} edetabeli${ending} `}
+          </CustomButton>
         </Popconfirm>
       </div>
     );

@@ -4,6 +4,7 @@ import { message, Table } from "antd";
 import { useHistory } from "react-router-dom";
 import moment from "moment-timezone";
 import * as services from "../../actions/services";
+import { CustomButton } from "../../components/CustomButton";
 
 const ChallengeHistory = (props) => {
   const { id } = props.match.params;
@@ -94,14 +95,13 @@ const ChallengeHistory = (props) => {
         user._id !== state.userHistory._id &&
         user.gender === state.userHistory.gender && (
           <div className="text-center">
-            <button
-              className="custom-button"
+            <CustomButton
               onClick={() =>
                 history.push(`/challenges/create/${state.ranking._id}`)
               }
             >
               Esita väljakutse
-            </button>
+            </CustomButton>
           </div>
         )}
       {state.userHistory && (

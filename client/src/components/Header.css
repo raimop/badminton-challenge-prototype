@@ -14,65 +14,8 @@ header {
   min-height: 60px;
 }
 
-.header--logo--icon {
-  position: relative;
-  left: 10px;
-  width: 45px;
-  height: 45px;
-  background: white;
-  border-radius: 25px;
-  z-index: 4;
-}
-
-.nav--links {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-}
-
-.nav--links li {
-  position: relative;
-  display: inline-block;
-  margin: 0 5px;
-  padding: .5em 1em;
-  background: black;
-  border-radius: 10px;
-}
-
-.nav--links li a {
-  color: white;
-  text-transform: uppercase;
-  font-size: small;
-}
-
-.notifications--unread {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  color: white;
-  background: rgb(250, 69, 69);
-  width: 22px;
-  height: 22px;
-  text-align: center;
-  border-radius: 20px;
-}
-
-.nav--links li a:hover {
-  color: hotpink;
-}
-
-.header--auth {
-  justify-self: right;
-}
-
 .disable-scrolling {
   overflow: hidden;
-}
-
-.header--auth:first-child::after {
-  content: " | ";
 }
 
 .header--hamburger {
@@ -83,62 +26,6 @@ header {
   .header--container {
     position: relative;
     z-index: 10;
-  }
-
-  .header--links li {
-    display: inline-block;
-    margin: 0 1px;
-    border-radius: 10px;
-    padding: .2em .4em;
-  }
-
-  .header--logo--icon {
-    width: 45px;
-    height: 45px;
-  }
-
-  .header--nav {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 0;
-    z-index: 2;
-    background-color: rgba(0, 0, 0, 0.98);
-    visibility: hidden;
-    transition: height 0.4s;
-  }
-
-  .show-nav {
-    height: 100vh;
-    visibility: visible;
-  }
-
-  .nav--links {
-    height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 250ms 200ms;
-  }
-
-  .show-nav-ul {
-    opacity: 1;
-  }
-
-  .nav--links li {
-    margin: 20px 0;
-    background: transparent;
-  }
-
-  .nav--links li a {
-    font-size: 24px;
-    padding: 1em;
-  }
-
-  .header--auth {
-    justify-self: flex-end;
   }
 
   .header--hamburger {
@@ -154,10 +41,5 @@ header {
     background-color: white;
     border-radius: 25px;
     z-index: 3;
-  }
-
-  .notifications--unread {
-    top: -5px;
-    right: 15px;
   }
 }

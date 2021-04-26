@@ -13,6 +13,7 @@ import {
 import * as services from "../../actions/services";
 import moment from "moment-timezone";
 import { updateChallenges, removeChallenge } from "../../redux/challengeSlice";
+import { CustomButton } from "../../components/CustomButton";
 
 const Challenges = () => {
   const user = useSelector((state) => state.auth.user);
@@ -153,12 +154,9 @@ const Challenges = () => {
     <>
       <div className="container">
         <h1>Väljakutsed</h1>
-        <button
-          className="custom-button"
-          onClick={() => history.push(`/ranking`)}
-        >
+        <CustomButton onClick={() => history.push(`/ranking`)}>
           Esita uus väljakutse
-        </button>
+        </CustomButton>
         <Table
           title={() => "Kinnitama väljakutsed"}
           loading={isLoading}

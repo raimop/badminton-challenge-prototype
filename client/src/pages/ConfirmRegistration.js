@@ -32,4 +32,5 @@ const ConfirmRegistration = (props) => {
     </main>
   );
 };
+
 export default ConfirmRegistration;

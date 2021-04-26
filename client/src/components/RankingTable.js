@@ -4,6 +4,7 @@ import { Table, Tooltip } from "antd";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PlusCircleTwoTone, StopTwoTone } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
   const user = useSelector((state) => state.auth.user);
@@ -92,6 +93,13 @@ const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
       />
     </>
   );
+};
+
+RankingTable.propTypes = {
+  data: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
+  displayJoinLeaveButton: PropTypes.func.isRequired
 };
 
 export default RankingTable;

@@ -2,13 +2,6 @@
   text-align: center;
 }
 
-.page-fullw-center {
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: center;
-}
-
 .container {
   max-width: 60%;
   margin: 0 auto;
@@ -27,15 +20,6 @@ button {
   border: none;
   background: none;
   cursor: pointer;
-}
-
-.custom-button {
-  background-color: black;
-  color: white;
-  border-radius: 10px;
-  padding: .5em 1em;
-  cursor: pointer;
-  margin-bottom: 10px;
 }
 
 .text-left {
@@ -57,12 +41,6 @@ button {
 
 .attribution a {
   color: black;
-}
-
-@media screen and (max-width: 768px) {
-  .custom-button {
-    padding: .25em .5em;
-  }
 }
 
 @media only screen and (max-width: 600px){

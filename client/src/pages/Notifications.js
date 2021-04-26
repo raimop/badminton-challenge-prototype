@@ -20,6 +20,7 @@ import {
 import * as services from "../actions/services";
 import moment from "moment-timezone";
 import "./Notifications.css";
+import { CustomButton } from "../components/CustomButton";
 
 const Notifications = ({ title }) => {
   const notifications = useSelector((state) => state.notifications);
@@ -193,17 +194,20 @@ const Notifications = ({ title }) => {
               okText="Jah"
               cancelText="Ei"
             >
-              <button className="custom-button">
-                <DeleteOutlined /> Kustuta kõik teated
-              </button>
+              <CustomButton
+                icon={<DeleteOutlined />}
+                onClick={handleNotificationDeleteAll}
+              >
+                Kustuta kõik teated
+              </CustomButton>
             </Popconfirm>
-            <button
-              className="custom-button"
-              style={{ marginLeft: "5px" }}
+            <CustomButton
+              icon={<CheckCircleFilled />}
               onClick={handleNotificationsMarkAllAsRead}
+              style={{ marginLeft: "5px" }}
             >
-              <CheckCircleFilled /> Märgi kõik loetuks
-            </button>
+              Märgi kõik loetuks
+            </CustomButton>
           </div>
         )}
         <Table
