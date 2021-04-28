@@ -3,9 +3,10 @@ import { Table, message, Popconfirm, Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchNotifications,
-  toggleNotification,
-  removeAllNotifications,
-  removeNotification,
+  toggleNotificationRead,
+  deleteAllNotification,
+  deleteNotification,
+  acceptChallengeFromNotification,
   removeChallengeFromNotification,
   markAllNotificationsRead,
 } from "../redux/notificationSlice";
@@ -20,6 +21,7 @@ import {
 import * as services from "../actions/services";
 import moment from "moment";
 import { CustomButton } from "../components/CustomButton";
+import { unwrapResult } from '@reduxjs/toolkit'
 import "./Notifications.css";
 
 const Notifications = ({ title }) => {
@@ -117,63 +119,69 @@ const Notifications = ({ title }) => {
   ];
 
   const handleChallengeAccept = (row) => {
-    services
-      .acceptChallenge(row.challenge._id)
-      .then((res) => {
-        message.success("Väljakutse aktsepteerimine õnnestus");
-        dispatch(removeChallengeFromNotification({ id: row._id }));
+    dispatch(acceptChallengeFromNotification(row.challenge._id))
+      .then(unwrapResult)
+      .then(res => {
         if (!row.read) handleNotificationReadToggle(row);
+        message.success("Väljakutses aktsepteerimine õnnestus")
       })
-      .catch((e) => message.error("Viga väljakutse aktsepteerimisel"));
+      .catch(error => {
+        message.error("Väljakutse aktsepteerimisel esines viga")
+      })
   };
 
   const handleChallengeDelete = (row) => {
-    services
-      .deleteChallenge(row.challenge._id)
-      .then((res) => {
-        message.success("Väljakutse loobumine õnnestus");
-        dispatch(removeChallengeFromNotification({ id: row._id }));
-        if (!row.read) handleNotificationReadToggle(row);
+    dispatch(removeChallengeFromNotification(row.challenge._id))
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Väljakutsest loobumine õnnestus")
       })
-      .catch((e) => message.error("Viga väljakutsest loobumisel"));
+      .catch(error => {
+        message.error("Väljakutse loobumisel esines viga")
+      })
   };
 
-  const handleNotificationDelete = (row) => {
-    services
-      .deleteNotification(row._id)
-      .then((res) => {
-        message.success(`Teade edukalt kustutatud`);
-        dispatch(removeNotification({ id: row._id }));
+  const handleNotificationDelete = ({ _id }) => {
+    dispatch(deleteNotification(_id))
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Väljakutse edukalt kustutatud")
       })
-      .catch((e) => message.error("Viga teate kustutamisel"));
+      .catch(error => {
+        message.error("Väljakutse kustutamise esines viga")
+      })
   };
   const handleNotificationsMarkAllAsRead = () => {
-    services
-      .markAllNotificationsRead()
-      .then((res) => {
-        message.success(`Kõik teated on märgitud loetuks`);
-        dispatch(markAllNotificationsRead());
+    dispatch(markAllNotificationsRead())
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Väljakutsed edukalt märgitud loetuks")
       })
-      .catch((e) => message.error("Viga teate kustutamisel"));
+      .catch(error => {
+        message.error("Väljakutsete märkimisel loetuks esines viga")
+      })
   };
 
   const handleNotificationDeleteAll = () => {
-    services
-      .deleteAllNotification()
-      .then((res) => {
-        message.success(`Kõik teated edukalt kustutatud`);
-        dispatch(removeAllNotifications());
+    dispatch(deleteAllNotification())
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Väljakutsed edukalt kustutatud")
       })
-      .catch((e) => message.error("Viga kõikide teadete kustutamisel"));
+      .catch(error => {
+        message.error("Väljakutsete kustutamisel esines viga")
+      })
   };
 
-  const handleNotificationReadToggle = (row) => {
-    services
-      .updateNotification(row._id)
-      .then((res) => {
-        dispatch(toggleNotification({ id: row._id }));
+  const handleNotificationReadToggle = ({ _id }) => {
+    dispatch(toggleNotificationRead(_id))
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Teade märgitud edukalt loetuks")
       })
-      .catch((e) => message.error("Viga loetuks/mitteloetuks märkimisel"));
+      .catch(error => {
+        message.error("Teate märkimisel loetuks esines viga")
+      })
   };
 
   useEffect(() => {

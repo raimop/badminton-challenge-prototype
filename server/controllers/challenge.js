@@ -77,8 +77,8 @@ exports.accept = async (req, res) => {
     let content = `${user.firstName} ${user.lastName} aktsepteeris teievahelise väljakutse, mis toimub ${moment(challenge.info.datetime).format(shortTimeFormat)}.`
     createNotification(challenge.challenger.user, content)
 
-    await challenge.save();
-    res.status(status.success).send(challenge)
+    const savedChallenge = await challenge.save();
+    res.status(status.success).send(savedChallenge)
   } catch(e) {
     res.status(status.bad).json({ msg: e.message });
   }
@@ -112,7 +112,7 @@ exports.deleteChallenge = async (req, res) => {
     const deletedChallenge = await challenge.delete();
     if (!deletedChallenge) throw Error(MESSAGES.CHALLENGE.ERROR_DELETING)
 
-    res.status(status.success).send(challenge)
+    res.status(status.success).send(deletedChallenge)
   } catch (e) {
     res.status(status.bad).json({ msg: e.message });
   }
@@ -204,7 +204,7 @@ exports.getAll = async (req, res) => {
         { 'challenger.user': user._id },
         { 'challenged.user': user._id }]
       })
-      .where("active").equals(true)
+      //.where("active").equals(true)
       .populate({ path:"challenger.user challenged.user winner", select:filter })
 
     res.status(status.success).send(doc)

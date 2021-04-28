@@ -10,10 +10,10 @@ import {
   StopTwoTone,
   IssuesCloseOutlined,
 } from "@ant-design/icons";
-import * as services from "../../actions/services";
 import moment from "moment";
-import { updateChallenges, removeChallenge } from "../../redux/challengeSlice";
+import { updateChallenges, deleteChallenge } from "../../redux/challengeSlice";
 import { CustomButton } from "../../components/CustomButton";
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const Challenges = () => {
   const user = useSelector((state) => state.auth.user);
@@ -143,13 +143,14 @@ const Challenges = () => {
   }, []);
 
   const deleteChallengeRow = ({ _id }) => {
-    services
-      .deleteChallenge(_id)
-      .then((res) => {
-        message.success("Väljakutse kustutamine õnnestus");
-        dispatch(removeChallenge({ id: _id }));
+    dispatch(deleteChallenge(_id))
+      .then(unwrapResult)
+      .then(res => {
+        message.success("Väljakutse edukalt kustutatud")
       })
-      .catch((e) => message.error("Viga väljakutse kustutamisel"));
+      .catch(error => {
+        message.error("Väljakutse kustutamise esines viga")
+      })
   };
 
   return (

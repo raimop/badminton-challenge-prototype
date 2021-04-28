@@ -9,6 +9,54 @@ export const fetchNotifications = createAsyncThunk(
   }
 )
 
+export const deleteNotification = createAsyncThunk(
+  'notifications/delete',
+  async (id) => {
+    const res = await services.deleteNotification(id)
+    return res
+  }
+)
+
+export const deleteAllNotification = createAsyncThunk(
+  'notifications/deleteAll',
+  async () => {
+    const res = await services.deleteAllNotification()
+    return res
+  }
+)
+
+export const toggleNotificationRead = createAsyncThunk(
+  'notifications/toggleRead',
+  async (id) => {
+    const res = await services.updateNotification(id)
+    return res
+  }
+)
+
+export const markAllNotificationsRead = createAsyncThunk(
+  'notifications/markAllRead',
+  async () => {
+    const res = await services.markAllNotificationsRead()
+    return res
+  }
+)
+
+export const removeChallengeFromNotification = createAsyncThunk(
+  'notifications/removeChallenge',
+  async (id) => {
+    const res = await services.deleteChallenge(id)
+    return res
+  }
+)
+
+export const acceptChallengeFromNotification = createAsyncThunk(
+  'notifications/acceptChallenge',
+  async (id) => {
+    const res = await services.acceptChallenge(id)
+    return res
+  }
+)
+
 export const notificationSlice = createSlice({
   name: 'notifications',
   initialState: {
@@ -17,23 +65,6 @@ export const notificationSlice = createSlice({
     error: ""
   },
   reducers: {
-    markAllNotificationsRead: state => {
-      state.data = state.data.map(e => { return { ...e, read: 1 }})
-    },
-    removeChallengeFromNotification: (state, { payload }) => {
-      const id = state.data.findIndex(e => e._id === payload.id);
-      state.data[id].challenge = null
-    },
-    removeAllNotifications: state => {
-      state.data = []
-    },
-    removeNotification: (state, { payload }) => {
-      state.data = state.data.filter(e => e._id !== payload.id)
-    },
-    toggleNotification: (state, { payload }) => {
-      const id = state.data.findIndex(e => e._id === payload.id);
-      state.data[id].read = state.data[id].read ? 0 : 1
-    },
     getNotificationPending: state => {
       state.isLoading = true;
     },
@@ -57,10 +88,31 @@ export const notificationSlice = createSlice({
     },
     [fetchNotifications.rejected]: (state, action) => {
       state.error = action.error
-    }
+    },
+    [deleteNotification.fulfilled]: (state, { payload }) => {
+      state.data = state.data.filter(e => e._id !== payload._id)
+    },
+    [deleteAllNotification.fulfilled]: (state) => {
+      state.data = []
+    },
+    [toggleNotificationRead.fulfilled]: (state, { payload }) => {
+      const id = state.data.findIndex(e => e._id === payload._id);
+      state.data[id].read = state.data[id].read ? 0 : 1
+    },
+    [markAllNotificationsRead.fulfilled]: (state) => {
+      state.data = state.data.map(e => { return { ...e, read: 1 }})
+    },
+    [removeChallengeFromNotification.fulfilled]: (state, { payload }) => {
+      const id = state.data.findIndex(e => e.challenge && e.challenge._id === payload._id);
+      state.data[id].challenge = null
+    },
+    [acceptChallengeFromNotification.fulfilled]: (state, { payload }) => {
+      const id = state.data.findIndex(e => e.challenge && e.challenge._id === payload._id);
+      state.data[id].challenge = null
+    },
   }
 });
 
-export const { getNotificationPending, getNotificationSuccess, getNotificationFail, removeNotification, removeAllNotifications, toggleNotification, removeChallengeFromNotification, addNotification, markAllNotificationsRead } = notificationSlice.actions;
+export const { getNotificationPending, getNotificationSuccess, getNotificationFail, removeNotification, removeAllNotifications, toggleNotification, addNotification } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

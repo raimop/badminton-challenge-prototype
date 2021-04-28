@@ -12,6 +12,14 @@ export const updateChallenges = createAsyncThunk(
   }
 )
 
+export const deleteChallenge = createAsyncThunk(
+  'challenges/remove',
+  async (id) => {
+    const res = await services.deleteChallenge(id)
+    return res
+  }
+)
+
 export const challengeSlice = createSlice({
   name: 'challenges',
   initialState: {
@@ -20,9 +28,6 @@ export const challengeSlice = createSlice({
     error: ""
   },
   reducers: {
-    removeChallenge: (state, { payload }) => {
-      state.data.unconfirmed = state.data.unconfirmed.filter(e => e._id !== payload.id)
-    },
     getChallengePending: state => {
       state.isLoading = true;
     },
@@ -46,10 +51,13 @@ export const challengeSlice = createSlice({
     },
     [updateChallenges.rejected]: (state, action) => {
       state.error = action.error
-    }
+    },
+    [deleteChallenge.fulfilled]: (state, { payload }) => {
+      state.data.unconfirmed = state.data.unconfirmed.filter(e => e._id !== payload._id)
+    },
   }
 });
 
-export const { getChallengePending, getChallengeSuccess, getChallengeFail, removeChallenge } = challengeSlice.actions;
+export const { getChallengePending, getChallengeSuccess, getChallengeFail } = challengeSlice.actions;
 
 export default challengeSlice.reducer;
