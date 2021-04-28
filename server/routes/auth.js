@@ -30,16 +30,16 @@ router.post(
   [
     check("firstName")
       .isLength({ min: 3 })
-      .withMessage("Peab olema vähemalt 2 tähemärki")
+      .withMessage("Peab olema vähemalt 3 tähemärki")
       .trim()
       .exists()
-      .matches(/^[A-ZÕÄÖÜ][a-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
+      .matches(/^[A-ZÕÄÖÜa-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
     check("lastName")
       .isLength({ min: 3 })
-      .withMessage("Peab olema vähemalt 2 tähemärki")
+      .withMessage("Peab olema vähemalt 3 tähemärki")
       .trim()
       .exists()
-      .matches(/^[A-ZÕÄÖÜ][a-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
+      .matches(/^[A-ZÕÄÖÜa-zõäöü]+$/).withMessage('Nimi peab olema tähestikuline'),
     check("email")
       .isEmail()
       .normalizeEmail()

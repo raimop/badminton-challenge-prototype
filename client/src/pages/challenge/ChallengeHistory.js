@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { message, Table } from "antd";
 import { useHistory } from "react-router-dom";
-import moment from "moment-timezone";
-import * as services from "../../actions/services";
 import { CustomButton } from "../../components/CustomButton";
+import moment from "moment";
+import * as services from "../../actions/services";
 
 const ChallengeHistory = (props) => {
   const { id } = props.match.params;
   const user = useSelector((state) => state.auth.user);
+  const ranking = useSelector((state) => state.ranking);
   const history = useHistory();
   const [state, setState] = useState({
     data: [],
@@ -16,6 +17,8 @@ const ChallengeHistory = (props) => {
     ranking: null,
     loading: false,
   });
+  const genderToType = { m: "ms", f: "ws" };
+  const isUserInRanking = user && ranking.data && ranking.data[genderToType[user.gender]].some(e => e.user._id === user._id)
 
   const helpers = {
     format: (data) => {
@@ -92,6 +95,7 @@ const ChallengeHistory = (props) => {
     <div className="container">
       {state.ranking &&
         state.userHistory &&
+        isUserInRanking &&
         user._id !== state.userHistory._id &&
         user.gender === state.userHistory.gender && (
           <div className="text-center">
@@ -110,9 +114,8 @@ const ChallengeHistory = (props) => {
           <strong>
             {state.userHistory.firstName} {state.userHistory.lastName}
           </strong>{" "}
-          {!state.userHistory.preferences.showHistory
-            ? "on valinud peita enda väljakutsete ajalugu"
-            : "väljakutsete ajalugu"}
+          {!state.userHistory.preferences.showHistory && "on valinud peita enda"}
+            väljakutsete ajalugu
         </h1>
       )}
       <Table

@@ -14,7 +14,6 @@ const Home = () => {
         <p>Prototüüp valminud bakalaureusetöö raames TLÜ 2021</p>
         <img src={badmintonPhoto} className="welcome--photo" alt="Badminton" />
         <p className="attribution text-center">
-          Pildi on teinud{" "}
           <a
             href="https://unsplash.com/@xuanming?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
             target="_blank"
@@ -22,7 +21,6 @@ const Home = () => {
           >
             炫铭
           </a>{" "}
-          ja saadud aadressilt{" "}
           <a
             href="https://unsplash.com/s/photos/badminton?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
             target="_blank"
@@ -30,9 +28,9 @@ const Home = () => {
           >
             Unsplash
           </a>
+          {" "}keskkonnast
         </p>
         <p className="attribution">
-          Logo on teinud{" "}
           <a
             href="https://www.freepik.com"
             title="Freepik"
@@ -41,7 +39,6 @@ const Home = () => {
           >
             Freepik
           </a>{" "}
-          ja saadud aadressit{" "}
           <a
             href="https://www.flaticon.com/"
             title="Flaticon"
@@ -50,6 +47,7 @@ const Home = () => {
           >
             flaticon.com
           </a>
+          {" "} keskkonnast
         </p>
       </main>
     </>

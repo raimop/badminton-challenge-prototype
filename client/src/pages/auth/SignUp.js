@@ -64,9 +64,9 @@ const SignUp = () => {
               { required: true, message: "Palun sisesta enda eesnimi!" },
               { min: 3, message: "Vähemalt 3 tähte pikk" },
               {
-                pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"),
+                pattern: new RegExp("^[A-ZÕÄÖÜa-zõäöü]+$"),
                 message:
-                  "Peab olema suure algustähega, teised väikesed ja ainult tähestikulised tähed on lubatud",
+                  "Tohib sisaldada ainult tähti.",
               },
             ]}
           >
@@ -78,9 +78,9 @@ const SignUp = () => {
               { required: true, message: "Palun sisesta enda perekonnanimi!" },
               { min: 3, message: "Vähemalt 3 tähte pikk" },
               {
-                pattern: new RegExp("^[A-ZÕÄÖÜ][a-zõäöü]+$"),
+                pattern: new RegExp("^[A-ZÕÄÖÜa-zõäöü]+$"),
                 message:
-                  "Peab olema suure algustähega, teised väikesed ja ainult tähestikulised tähed on lubatud",
+                  "Tohib sisaldada ainult tähti.",
               },
             ]}
           >

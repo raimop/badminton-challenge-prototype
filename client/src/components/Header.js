@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import { Navigation } from "./Navigation";
-import { Auth } from "./Auth";
-import { Logo } from "./Logo";
+import { Navigation } from "./HeaderComponents/Navigation";
+import { Auth } from "./HeaderComponents/Auth";
+import { Logo } from "./HeaderComponents/Logo";
 import "./Header.css";
 
 const Header = () => {

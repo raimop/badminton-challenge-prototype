@@ -4,12 +4,65 @@ const { status } = require('../helpers/status');
 const { MESSAGES } = require('../helpers/messages');
 
 exports.getAll = async (req, res) => {
-  const sortOption = { points: -1 }
-  const populateOption = { path: 'user', select: filter }
+  const matchMs = [
+    {
+      $match: {
+        category: "ms",
+      },
+    },
+  ]
+
+  const matchWs = [
+    {
+      $match: {
+        category: "ws",
+      },
+    },
+  ]
+
+  const options = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    { $unwind: "$user" },
+    {
+      $addFields: {
+        user: {
+          fullName: {
+            $concat: ["$user.firstName", " ", "$user.lastName"],
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        user: {
+          gender: 0,
+          email: 0,
+          password: 0,
+          confirmationCode: 0,
+          createdAt: 0,
+          __v: 0,
+          preferences: 0,
+          status: 0,
+        }
+      }
+    },
+    {
+      $sort: {
+        points: -1
+      }
+    }
+  ]
 
   try {
-    const ms = await Ranking.find({ category: "ms" }).sort(sortOption).populate(populateOption)
-    const ws = await Ranking.find({ category: "ws" }).sort(sortOption).populate(populateOption)
+    const ms = await Ranking.aggregate([...matchMs, ...options]);    
+    const ws = await Ranking.aggregate([...matchWs, ...options]);
 
     res.status(status.success).json({ ms, ws });
   } catch (e) {

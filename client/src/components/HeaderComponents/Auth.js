@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Menu, Dropdown, message } from "antd";
 import { useHistory, Link } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
-import { logoutAndErase } from "../redux/authSlice";
+import { logoutAndErase } from "../../redux/authSlice";
 import "./Auth.css";
 
 export const Auth = () => {

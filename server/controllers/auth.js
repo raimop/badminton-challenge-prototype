@@ -6,6 +6,8 @@ const { createNotification } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
 const nodemailer = require("../nodemailer");
 
+const normalizeName = name => name[0].toUpperCase() + name.slice(1).toLowerCase();
+
 exports.login = async (req, res) => {
   const {
     email,
@@ -68,9 +70,9 @@ exports.signup = async (req, res) => {
     const confirmationToken = jwt.sign({ email }, process.env.JWT_SECRET);
 
     const newUser = new User({
-      firstName,
-      lastName,
-      gender,
+      firstName: normalizeName(firstName),
+      lastName: normalizeName(lastName),
+      gender: gender.toLowerCase(),
       email,
       password: hash,
       confirmationCode: confirmationToken

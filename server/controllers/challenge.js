@@ -6,8 +6,7 @@ const { status } = require('../helpers/status');
 const { filter, createNotification, updatePoints } = require('../helpers/utils');
 const { MESSAGES } = require('../helpers/messages');
 const nodemailer = require("../nodemailer");
-const moment = require("moment-timezone");
-moment.updateLocale('et', { months : [ "jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember" ]});
+const moment = require("moment");
 
 const shortTimeFormat = 'DD.MM HH.mm'
 

@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Table, Tooltip } from "antd";
+import { Table, Tooltip, Input } from "antd";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PlusCircleTwoTone, StopTwoTone } from "@ant-design/icons";
 import PropTypes from "prop-types";
 
+const { Search } = Input;
+
 const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
   const user = useSelector((state) => state.auth.user);
   const onList = user && data.some((e) => e.user._id === user._id);
+  const [filteredData, setFilteredData] = useState([]);
   const history = useHistory();
   const typeToGender = { ms: "m", ws: "f" };
 
+  useEffect(() => {
+    setFilteredData(data)
+  }, [data])
+
   const redirectToChallenge = (id) => history.push(`/challenges/create/${id}`);
+
+  const handleChange = e => {
+    const standardize = input => input.toLowerCase().replace(/\s/g, '');
+    const value = standardize(e.target.value)
+    setFilteredData(data.filter(e => standardize(e.user.fullName).includes(value)))
+  }
 
   const columns = [
     {
@@ -83,13 +96,19 @@ const RankingTable = ({ data, loading, type, displayJoinLeaveButton }) => {
           ? displayJoinLeaveButton("leave")
           : displayJoinLeaveButton("join")
         : null}
+      <Search
+        size="middle"
+        placeholder="Otsi nime järgi"
+        onChange={handleChange}
+        allowClear
+      />
       <Table
         loading={loading}
         pagination={false}
         locale={{ emptyText: "Osalejad puuduvad" }}
         columns={columns}
         rowKey="_id"
-        dataSource={data}
+        dataSource={filteredData}
       />
     </>
   );

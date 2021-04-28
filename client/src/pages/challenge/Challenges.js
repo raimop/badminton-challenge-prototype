@@ -11,7 +11,7 @@ import {
   IssuesCloseOutlined,
 } from "@ant-design/icons";
 import * as services from "../../actions/services";
-import moment from "moment-timezone";
+import moment from "moment";
 import { updateChallenges, removeChallenge } from "../../redux/challengeSlice";
 import { CustomButton } from "../../components/CustomButton";
 
@@ -134,6 +134,8 @@ const Challenges = () => {
     },
   ];
 
+  const secondColumns = columns.slice(0,columns.length-1)
+
   const submitResult = (row) => history.push(`/challenges/update/${row._id}`);
 
   useEffect(() => {
@@ -180,7 +182,7 @@ const Challenges = () => {
           }
           loading={isLoading}
           locale={{ emptyText: "Väljakutsed puuduvad" }}
-          columns={columns}
+          columns={secondColumns}
           rowKey="_id"
           pagination={false}
           dataSource={data.rest}

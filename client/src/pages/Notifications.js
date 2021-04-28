@@ -18,9 +18,9 @@ import {
   CheckCircleFilled,
 } from "@ant-design/icons";
 import * as services from "../actions/services";
-import moment from "moment-timezone";
-import "./Notifications.css";
+import moment from "moment";
 import { CustomButton } from "../components/CustomButton";
+import "./Notifications.css";
 
 const Notifications = ({ title }) => {
   const notifications = useSelector((state) => state.notifications);
@@ -186,6 +186,12 @@ const Notifications = ({ title }) => {
         <h1>{title}</h1>
         {data.length >= 1 && (
           <div style={{ display: "flex" }}>
+            <CustomButton
+              icon={<CheckCircleFilled />}
+              onClick={handleNotificationsMarkAllAsRead}
+            >
+              Märgi kõik loetuks
+            </CustomButton>
             <Popconfirm
               icon={<QuestionOutlined style={{ color: "red" }} />}
               title={`Oled kindel, et tahad kõik teated kustutada?`}
@@ -197,17 +203,11 @@ const Notifications = ({ title }) => {
               <CustomButton
                 icon={<DeleteOutlined />}
                 onClick={handleNotificationDeleteAll}
+                style={{ marginLeft: "5px" }}
               >
                 Kustuta kõik teated
               </CustomButton>
             </Popconfirm>
-            <CustomButton
-              icon={<CheckCircleFilled />}
-              onClick={handleNotificationsMarkAllAsRead}
-              style={{ marginLeft: "5px" }}
-            >
-              Märgi kõik loetuks
-            </CustomButton>
           </div>
         )}
         <Table

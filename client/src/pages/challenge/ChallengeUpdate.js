@@ -15,7 +15,7 @@ import {
 import { QuestionOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import * as services from "../../actions/services";
-import moment from "moment-timezone";
+import moment from "moment";
 import "./ChallengeUpdate.css";
 import { CustomButton } from "../../components/CustomButton";
 

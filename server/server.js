@@ -10,6 +10,7 @@ const Notification = require('./models/Notification');
 const changeStream = Notification.watch()
 const PORT = process.env.PORT || 8080;
 require('dotenv').config();
+require('moment/locale/et');
 
 const authRoutes = require('./routes/auth');
 const rankingRoutes = require('./routes/ranking');

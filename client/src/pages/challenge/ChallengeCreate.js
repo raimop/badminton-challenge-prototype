@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Spin, Select, Button, DatePicker, Row, message } from "antd";
 import { useHistory } from "react-router-dom";
-import moment from "moment-timezone";
+import moment from "moment";
 import * as services from "../../actions/services";
 
 const { Option } = Select;
