@@ -19,15 +19,11 @@ const notificationRoutes = require('./routes/notification');
 const userRoutes = require('./routes/user');
 
 io.on("connection", (socket) => {
-  /* console.log("New client connected"); */
   changeStream.on('change', change => {
     if (change.operationType === 'insert'){
       socket.emit(change.fullDocument.to, change.fullDocument);
     }
   })
-  /* socket.on("disconnect", () => {
-    console.log("Client disconnected");
-  }) */
 });
 
 app.use(cors());

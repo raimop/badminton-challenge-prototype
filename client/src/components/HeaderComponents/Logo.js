@@ -6,11 +6,11 @@ import "./Logo.css";
 
 export const Logo = () => {
   return (
-    <div className="header--logo">
+    <div className="header__logo">
       <Link to="/">
         <Tooltip title="Avalehele">
           <img
-            className="header--logo--icon"
+            className="header__logo--icon"
             src={BadmintonChallengeLogo}
             alt="logo"
           />

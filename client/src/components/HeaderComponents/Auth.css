@@ -1,13 +1,13 @@
-.header--auth {
+.header__auth {
   justify-self: right;
 }
 
-.header--auth:first-child::after {
+.header__auth:first-child::after {
   content: " | ";
 }
 
 @media screen and (max-width: 576px) {
-  .header--auth {
+  .header__auth {
     justify-self: flex-end;
   }
 }

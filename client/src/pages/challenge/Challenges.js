@@ -109,7 +109,7 @@ const Challenges = () => {
       width: "5%",
       align: "center",
       render: (row) => {
-        //if (moment(row.info.datetime).diff(moment()) >= 0) return helpers.dateHasNotPassed()
+        if (moment(row.info.datetime).diff(moment()) >= 0) return helpers.dateHasNotPassed()
         if (row.challenger.resultAccepted && row.challenged.resultAccepted)
           return helpers.resultConfirmed();
         if (user._id === row.challenger.user._id) {

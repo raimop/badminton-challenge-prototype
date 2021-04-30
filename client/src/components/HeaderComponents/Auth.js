@@ -42,7 +42,7 @@ export const Auth = () => {
   );
 
   return (
-    <div className="header--auth">
+    <div className="header__auth">
       {user ? (
         <Dropdown overlay={menu} trigger={["click"]}>
           {welcome}

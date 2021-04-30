@@ -14,8 +14,8 @@ export const Navigation = ({ navRef, toggleNav }) => {
   }, [notifications]);
 
   return (
-    <nav ref={navRef} className="header--nav" onClick={toggleNav}>
-      <ul className="nav--links">
+    <nav ref={navRef} className="header__nav" onClick={toggleNav}>
+      <ul className="nav__links">
         <li>
           <Link to="/ranking">Edetabel</Link>
         </li>

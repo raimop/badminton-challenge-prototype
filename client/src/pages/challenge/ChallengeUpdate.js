@@ -151,9 +151,9 @@ const ChallengeUpdate = (props) => {
         (s1 === 30 || s2 === 30) &&
         (Math.abs(s1 - s2) === 1 || Math.abs(s1 - s2) === 2)
       )
-        return true; // 30-28, 30-29 erand
-      if ((s1 > 21 || s2 > 21) && Math.abs(s1 - s2) === 2) return true; // kui mõlemal üle 21 2 punktiline vahe
-      if ((s1 === 21 && s2 <= 19) || (s2 === 21 && s1 <= 19)) return true; // normaalne tulemus
+        return true; // 30-28, 30-29 exception
+      if ((s1 > 21 || s2 > 21) && Math.abs(s1 - s2) === 2) return true; // if both over 21 exception
+      if ((s1 === 21 && s2 <= 19) || (s2 === 21 && s1 <= 19)) return true; // normal score
       return false;
     };
 

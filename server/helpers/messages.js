@@ -24,7 +24,8 @@ exports.MESSAGES = {
     CANNOT_ACCEPT: "Ei saa aktsepteerida väljakutset, mida pole esitatud Sulle",
     ALREADY_ACCEPTED: "Väljakutse on juba aktsepteeritud",
     CANNOT_UPDATE_FUTURE_CHALLENGE: "Ei saa sisestada tulemust väljakutsele, mis toimub tulevikus",
-    INVALID_SCORE: "Ebakorrektne tulemuse formaat"
+    INVALID_SCORE: "Ebakorrektne tulemuse formaat",
+    WINNER_ID_NOT_VALID: "Võitja ID ei ole korrektne"
   },
   USER: {
     NO_INFO: "Kasutaja andmed puuduvad",
@@ -46,5 +47,8 @@ exports.MESSAGES = {
   NOTIFICATION: {
     DOES_NOT_EXIST: "Sellist teadet ei leitud",
     DO_NOT_EXIST: "Teateid ei leitud"
+  },
+  AUTH: {
+    ACCESS_DENIED: "Juurdepääsuluba puudub",
   }
 }

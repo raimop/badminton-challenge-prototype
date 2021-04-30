@@ -1,4 +1,4 @@
-.header--logo--icon {
+.header__logo--icon {
   position: relative;
   left: 10px;
   width: 45px;
@@ -9,7 +9,7 @@
 }
 
 @media screen and (max-width: 576px) {
-  .header--logo--icon {
+  .header__logo--icon {
     width: 45px;
     height: 45px;
   }

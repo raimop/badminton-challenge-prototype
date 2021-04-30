@@ -9,13 +9,17 @@ const nodemailer = require("../nodemailer");
 const moment = require("moment");
 
 const shortTimeFormat = 'DD.MM HH.mm'
+const time = {
+  twentyFourHours: 1440,
+  fortyEightHours: 2880
+}
 
 exports.create = async (req, res) => {
   try {
     const { address, datetime } = req.body;
     if (!address || !datetime) throw Error(MESSAGES.CHALLENGE.MUST_ENTER_PLACE_TIME)
 
-    if (moment(datetime).diff(moment(), "minutes") <= 2880) throw Error(MESSAGES.CHALLENGE.DATETIME_LESS_THAN_48H)
+    if (moment(datetime).diff(moment(), "minutes") <= time.fortyEightHours) throw Error(MESSAGES.CHALLENGE.DATETIME_LESS_THAN_48H)
     
     const { user } = req;
     const { id } = req.params;
@@ -96,7 +100,7 @@ exports.deleteChallenge = async (req, res) => {
       throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_CHALLENGE_SELF)
     }
 
-    if (challenge.active && !(moment(challenge.info.datetime).diff(moment(), "minutes") >= 1440)) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_24H)
+    if (challenge.active && !(moment(challenge.info.datetime).diff(moment(), "minutes") >= time.twentyFourHours)) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_24H)
     if (challenge.challenger.resultAccepted || challenge.challenged.resultAccepted) throw Error(MESSAGES.CHALLENGE.CANNOT_DELETE_RESULT)
 
     let sendTo = challenge.challenged.user.toString() === user._id ? challenge.challenger.user : challenge.challenged.user;
@@ -124,7 +128,7 @@ exports.update = async (req, res) => {
     const { score, winner } = req.body;
     const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(winner)) throw Error("Võitja ID ei ole korrektne");
+    if(!mongoose.Types.ObjectId.isValid(winner)) throw Error(MESSAGES.CHALLENGE.WINNER_ID_NOT_VALID);
     
     const challenge = await Challenge.findOne({ _id: id })
       .populate({ path:"challenger.user challenged.user", select:filter })
@@ -134,9 +138,9 @@ exports.update = async (req, res) => {
       throw Error(MESSAGES.CHALLENGE.CANNOT_UPDATE_CHALLENGE_SELF)
     }
 
-    /* if(moment(challenge.info.datetime).diff(moment()) >= 0){
+    if(moment(challenge.info.datetime).diff(moment()) >= 0){
       throw Error(MESSAGES.CHALLENGE.CANNOT_UPDATE_FUTURE_CHALLENGE)
-    } */
+    }
 
     if (challenge.winner == null){
       challenge.winner = winner;
@@ -204,7 +208,7 @@ exports.getAll = async (req, res) => {
         { 'challenger.user': user._id },
         { 'challenged.user': user._id }]
       })
-      //.where("active").equals(true)
+      .where("active").equals(true)
       .populate({ path:"challenger.user challenged.user winner", select:filter })
 
     res.status(status.success).send(doc)
